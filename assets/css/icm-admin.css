@@ -1,0 +1,359 @@
+/**
+ * Icecat Category Mapper — Admin Styles
+ */
+
+/* ── Layout ── */
+.icm-wrap {
+    max-width: 1200px;
+}
+
+.icm-tab-content {
+    margin-top: 20px;
+}
+
+/* ── Header / Actions Row ── */
+.icm-mappings-header {
+    margin-bottom: 15px;
+}
+
+.icm-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.icm-search-form {
+    display: flex;
+    gap: 5px;
+}
+
+.icm-search-input {
+    min-width: 250px;
+}
+
+.icm-actions-buttons {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.icm-inline-form {
+    display: inline-block;
+}
+
+.icm-cache-info {
+    color: #666;
+    font-size: 13px;
+}
+
+/* ── Stats ── */
+.icm-stats {
+    color: #555;
+    font-size: 13px;
+}
+
+/* ── Table ── */
+.icm-table {
+    margin-top: 10px;
+}
+
+.icm-col-id {
+    width: 100px;
+}
+
+.icm-col-default {
+    width: 80px;
+    text-align: center;
+}
+
+.icm-col-actions {
+    width: 180px;
+}
+
+.icm-col-count {
+    width: 120px;
+}
+
+.icm-col-date {
+    width: 130px;
+}
+
+.icm-col-action {
+    width: 140px;
+}
+
+.icm-col-quickmap {
+    width: 280px;
+}
+
+.icm-no-data {
+    text-align: center;
+    color: #999;
+    padding: 20px !important;
+    font-style: italic;
+}
+
+.icm-editing-row {
+    background-color: #fff3cd !important;
+}
+
+/* ── Badges ── */
+.icm-target-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #e7f5e7;
+    color: #2e7d32;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.icm-target-empty {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #fff3cd;
+    color: #856404;
+    border-radius: 3px;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.icm-multi-select {
+    min-width: 400px;
+    max-width: 600px;
+}
+
+.icm-multi-select option {
+    padding: 4px 8px;
+}
+
+.icm-default-badge {
+    color: #2e7d32;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.icm-badge {
+    display: inline-block;
+    min-width: 18px;
+    padding: 1px 6px;
+    margin-left: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: center;
+    color: #fff;
+    background: #d63638;
+    border-radius: 10px;
+    vertical-align: middle;
+}
+
+.icm-small-id {
+    font-size: 11px;
+    color: #888;
+    margin-left: 4px;
+}
+
+.icm-unknown {
+    color: #999;
+    font-style: italic;
+}
+
+/* ── Action badges (log) ── */
+.icm-action-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.icm-action-remapped {
+    background: #e7f5e7;
+    color: #2e7d32;
+}
+
+.icm-action-unmapped {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.icm-action-skipped {
+    background: #e9ecef;
+    color: #555;
+}
+
+/* ── Delete button ── */
+.icm-delete-btn {
+    color: #d63638 !important;
+    border-color: #d63638 !important;
+}
+
+.icm-delete-btn:hover {
+    background: #d63638 !important;
+    color: #fff !important;
+}
+
+/* ── Form Card ── */
+.icm-form-wrapper {
+    margin-bottom: 20px;
+}
+
+.icm-form-card {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 15px 20px;
+}
+
+.icm-form-card h3 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.icm-form-table {
+    margin-top: 0;
+}
+
+.icm-form-table th {
+    width: 200px;
+    padding: 10px 10px 10px 0;
+}
+
+.icm-form-table td {
+    padding: 10px 0;
+}
+
+/* ── Icecat Search Dropdown ── */
+.icm-search-dropdown {
+    position: absolute;
+    z-index: 100;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    max-height: 250px;
+    overflow-y: auto;
+    min-width: 400px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.icm-search-dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+}
+
+.icm-search-dropdown-item:hover {
+    background: #f0f7ff;
+}
+
+.icm-search-dropdown-item .icm-search-id {
+    color: #888;
+    font-size: 11px;
+    margin-left: 8px;
+}
+
+.icm-search-dropdown-item .icm-search-da {
+    color: #666;
+    font-size: 12px;
+    display: block;
+    margin-top: 2px;
+}
+
+/* ── Quick-map form ── */
+.icm-quickmap-form {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.icm-quickmap-select {
+    min-width: 160px;
+}
+
+/* ── Log filters ── */
+.icm-log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.icm-log-filters {
+    font-size: 13px;
+}
+
+.icm-filter-link {
+    text-decoration: none;
+}
+
+.icm-filter-link.current {
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.icm-filter-link .count {
+    color: #888;
+}
+
+/* ── Settings ── */
+.icm-test-result {
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+.icm-test-result.success {
+    color: #2e7d32;
+}
+
+.icm-test-result.error {
+    color: #d63638;
+}
+
+/* ── Batch recheck progress ── */
+.icm-batch-recheck {
+    margin-top: 15px;
+}
+
+.icm-batch-progress {
+    margin-top: 15px;
+}
+
+.icm-progress-bar {
+    width: 100%;
+    max-width: 500px;
+    height: 20px;
+    background: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.icm-progress-fill {
+    height: 100%;
+    background: #2271b1;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+#icm-batch-status {
+    font-size: 13px;
+    color: #555;
+    margin-top: 8px;
+}
+
+/* ── Empty state ── */
+.icm-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #555;
+}
+
+.icm-empty-state p:first-child {
+    font-size: 16px;
+    font-weight: 600;
+}
