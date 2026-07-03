@@ -77,9 +77,9 @@ class ICM_DB {
     public static function get_mapping_by_fuzzy_name( string $name ): ?array {
         global $wpdb;
 
-        // Spring fuzzy over for korte navne: substring-match på 1-3 tegn giver vilkårlige
-        // false-positives (et forkert fuzzy-hit remapper til forkert kategori UDEN advarsel —
-        // værre end at lande i "Ikke-mappede"). Eksakt-match (Strategi 2) dækker korte navne.
+        // Skip fuzzy matching for short names: a substring match on 1-3 characters produces
+        // arbitrary false positives (a wrong fuzzy hit remaps to the wrong category with NO
+        // warning — worse than landing in "Unmapped"). Exact match (Strategy 2) covers short names.
         if ( mb_strlen( trim( $name ) ) < 4 ) {
             return null;
         }
@@ -87,8 +87,8 @@ class ICM_DB {
         $table = self::mappings_table();
         $like  = '%' . $wpdb->esc_like( $name ) . '%';
 
-        // ORDER BY CHAR_LENGTH ASC → det KORTESTE (mest specifikke) lagrede navn der indeholder
-        // søgningen vinder deterministisk. Uden ORDER BY var LIMIT 1-vinderen reelt vilkårlig (DB-rækkefølge).
+        // ORDER BY CHAR_LENGTH ASC → the SHORTEST (most specific) stored name containing the
+        // query wins deterministically. Without ORDER BY, the LIMIT 1 winner was effectively arbitrary (DB order).
         $row = $wpdb->get_row(
             $wpdb->prepare(
                 "SELECT * FROM {$table}

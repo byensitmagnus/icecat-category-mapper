@@ -33,7 +33,7 @@ class ICM_Icecat_Fetcher {
         if ( empty( $username ) || empty( $password ) ) {
             return new WP_Error(
                 'icm_no_credentials',
-                'Icecat brugernavn og adgangskode er paakraeved. Angiv dem under Indstillinger.'
+                __( 'Icecat username and password are required. Enter them under Settings.', 'icecat-category-mapper' )
             );
         }
 
@@ -48,7 +48,7 @@ class ICM_Icecat_Fetcher {
         if ( is_wp_error( $response ) ) {
             return new WP_Error(
                 'icm_fetch_failed',
-                'Kunne ikke hente Icecat kategorier: ' . $response->get_error_message()
+                __( 'Could not fetch Icecat categories:', 'icecat-category-mapper' ) . ' ' . $response->get_error_message()
             );
         }
 
@@ -56,13 +56,13 @@ class ICM_Icecat_Fetcher {
         if ( $status_code !== 200 ) {
             return new WP_Error(
                 'icm_fetch_http_error',
-                sprintf( 'Icecat API returnerede HTTP %d. Tjek dine credentials.', $status_code )
+                sprintf( /* translators: %d: HTTP status code. */ __( 'The Icecat API returned HTTP %d. Check your credentials.', 'icecat-category-mapper' ), $status_code )
             );
         }
 
         $body = wp_remote_retrieve_body( $response );
         if ( empty( $body ) ) {
-            return new WP_Error( 'icm_empty_response', 'Tomt svar fra Icecat API.' );
+            return new WP_Error( 'icm_empty_response', __( 'Empty response from the Icecat API.', 'icecat-category-mapper' ) );
         }
 
         // Decompress gzip
@@ -79,9 +79,9 @@ class ICM_Icecat_Fetcher {
             return $categories;
         }
 
-        // Cache the result. 3. arg er $autoload (bool) — send eksplicit false, ellers ville
-        // den (potentielt MB-store) Icecat-taksonomi blive autoloadet på HVER request hvis
-        // option'en nogensinde slettes og genskabes her ('' + 'no' var en no-op/ignoreret 4. arg).
+        // Cache the result. The 3rd arg is $autoload (bool) — pass an explicit false, otherwise
+        // the (potentially MB-sized) Icecat taxonomy would be autoloaded on EVERY request if the
+        // option is ever deleted and recreated here ('' + 'no' was a no-op/ignored 4th arg).
         update_option( 'icm_categories_cache', maybe_serialize( $categories ), false );
         update_option( 'icm_categories_cache_time', time() );
 
@@ -95,7 +95,7 @@ class ICM_Icecat_Fetcher {
      * @return array|WP_Error Array of parsed categories.
      */
     private static function parse_categories_xml( string $xml_string ) {
-        $lang_id    = (int) get_option( 'icm_icecat_lang_id', 8 ); // Default: Danish
+        $lang_id    = (int) get_option( 'icm_icecat_lang_id', 1 ); // Default: English (matches the activation default)
         $categories = [];
 
         // Suppress XML errors and handle them manually
@@ -106,7 +106,7 @@ class ICM_Icecat_Fetcher {
 
         if ( ! $result ) {
             libxml_use_internal_errors( $use_errors );
-            return new WP_Error( 'icm_xml_parse_error', 'Kunne ikke parse Icecat XML.' );
+            return new WP_Error( 'icm_xml_parse_error', __( 'Could not parse the Icecat XML.', 'icecat-category-mapper' ) );
         }
 
         while ( $reader->read() ) {
@@ -129,7 +129,7 @@ class ICM_Icecat_Fetcher {
             }
 
             $name_en = '';
-            $name_da = '';
+            $name_da = ''; // Name in the configured Icecat language (stored in the *_da column)
             $parent_id = 0;
 
             // Extract names by language
@@ -142,7 +142,7 @@ class ICM_Icecat_Fetcher {
                         $name_en = $val;  // English
                     }
                     if ( $lid === $lang_id ) {
-                        $name_da = $val;  // Danish (or configured language)
+                        $name_da = $val;  // Configured language
                     }
                 }
             }
@@ -164,7 +164,7 @@ class ICM_Icecat_Fetcher {
         libxml_use_internal_errors( $use_errors );
 
         if ( empty( $categories ) ) {
-            return new WP_Error( 'icm_no_categories', 'Ingen kategorier fundet i Icecat XML.' );
+            return new WP_Error( 'icm_no_categories', __( 'No categories found in the Icecat XML.', 'icecat-category-mapper' ) );
         }
 
         return $categories;
@@ -203,10 +203,10 @@ class ICM_Icecat_Fetcher {
     public static function get_cache_time_formatted(): string {
         $cache_time = (int) get_option( 'icm_categories_cache_time', 0 );
         if ( $cache_time === 0 ) {
-            return 'Aldrig hentet';
+            return __( 'Never fetched', 'icecat-category-mapper' );
         }
 
-        return wp_date( 'd. M Y H:i', $cache_time );
+        return wp_date( get_option( 'date_format', 'Y-m-d' ) . ' H:i', $cache_time );
     }
 
     /**
@@ -251,7 +251,7 @@ class ICM_Icecat_Fetcher {
         $password = get_option( 'icm_icecat_password', '' );
 
         if ( empty( $username ) || empty( $password ) ) {
-            return new WP_Error( 'icm_no_credentials', 'Brugernavn og adgangskode mangler.' );
+            return new WP_Error( 'icm_no_credentials', __( 'Username and password are missing.', 'icecat-category-mapper' ) );
         }
 
         // Use a lightweight request to test credentials (HEAD request)
@@ -263,7 +263,7 @@ class ICM_Icecat_Fetcher {
         ] );
 
         if ( is_wp_error( $response ) ) {
-            return new WP_Error( 'icm_connection_failed', 'Forbindelsesfejl: ' . $response->get_error_message() );
+            return new WP_Error( 'icm_connection_failed', __( 'Connection error:', 'icecat-category-mapper' ) . ' ' . $response->get_error_message() );
         }
 
         $status = wp_remote_retrieve_response_code( $response );
@@ -271,9 +271,9 @@ class ICM_Icecat_Fetcher {
         if ( $status === 200 ) {
             return true;
         } elseif ( $status === 401 ) {
-            return new WP_Error( 'icm_auth_failed', 'Ugyldige credentials (HTTP 401).' );
+            return new WP_Error( 'icm_auth_failed', __( 'Invalid credentials (HTTP 401).', 'icecat-category-mapper' ) );
         }
 
-        return new WP_Error( 'icm_unexpected_status', sprintf( 'Uventet HTTP-status: %d', $status ) );
+        return new WP_Error( 'icm_unexpected_status', sprintf( /* translators: %d: HTTP status code. */ __( 'Unexpected HTTP status: %d', 'icecat-category-mapper' ), $status ) );
     }
 }

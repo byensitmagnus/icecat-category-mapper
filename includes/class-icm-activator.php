@@ -15,6 +15,7 @@ class ICM_Activator {
     public static function activate(): void {
         self::create_tables();
         self::seed_icecat_library();
+        self::migrate_unmapped_sentinel();
         self::set_default_options();
 
         update_option( 'icm_db_version', ICM_VERSION );
@@ -99,9 +100,9 @@ class ICM_Activator {
         $library = ICM_Defaults::get_icecat_category_library();
 
         foreach ( $library as $entry ) {
-            // Idempotent: indsæt kun rækker hvis Icecat-ID'et ikke allerede findes. Så nye
-            // default-kategorier propageres ved version-upgrade (ikke kun frisk install), OG
-            // admins konfigurerede mål (woo_term_slug) på eksisterende rækker bevares urørt.
+            // Idempotent: only insert rows if the Icecat ID does not already exist. That way new
+            // default categories propagate on version upgrades (not just fresh installs), AND the
+            // admin's configured targets (woo_term_slug) on existing rows are left untouched.
             if ( ICM_DB::get_mapping_by_icecat_id( (int) $entry['icecat_cat_id'] ) ) {
                 continue;
             }
@@ -114,6 +115,20 @@ class ICM_Activator {
                 'is_default'         => 1,     // Marks it as shipped default data
             ] );
         }
+    }
+
+    /**
+     * v1.1.0 stored the "no category" sentinel as a Danish literal in the unmapped table;
+     * since v1.2.0 the locale-independent '(no category)' is stored and translated at
+     * render time only. Merge old rows into the new sentinel so the bucket stays whole.
+     */
+    private static function migrate_unmapped_sentinel(): void {
+        global $wpdb;
+        $wpdb->update(
+            ICM_DB::unmapped_table(),
+            [ 'icecat_cat_name' => '(no category)' ],
+            [ 'icecat_cat_name' => '(ingen kategori)' ]
+        );
     }
 
     /**

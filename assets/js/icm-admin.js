@@ -46,19 +46,19 @@
         })
         .done(function (response) {
             if (response.success) {
-                $status.text('Icecat cache: ' + response.data.cache_time + ' (' + response.data.count + ' kategorier)');
+                $status.text(sprintfLite(icm_admin.i18n.cache_status, [response.data.cache_time, response.data.count]));
                 $btn.text(icm_admin.i18n.fetch_done);
                 setTimeout(function () {
-                    $btn.text('Hent Icecat kategorier').prop('disabled', false);
+                    $btn.text(icm_admin.i18n.fetch_button).prop('disabled', false);
                 }, 2000);
             } else {
                 alert(icm_admin.i18n.fetch_error + '\n' + (response.data || ''));
-                $btn.text('Hent Icecat kategorier').prop('disabled', false);
+                $btn.text(icm_admin.i18n.fetch_button).prop('disabled', false);
             }
         })
         .fail(function () {
             alert(icm_admin.i18n.fetch_error);
-            $btn.text('Hent Icecat kategorier').prop('disabled', false);
+            $btn.text(icm_admin.i18n.fetch_button).prop('disabled', false);
         });
     });
 
@@ -112,7 +112,7 @@
                 });
                 $dropdown.show();
             } else {
-                $dropdown.html('<div class="icm-search-dropdown-item">Ingen resultater</div>').show();
+                $dropdown.html($('<div class="icm-search-dropdown-item">').text(icm_admin.i18n.no_results)).show();
             }
         });
     }
@@ -173,7 +173,7 @@
     var batchTotalUnmapped = 0;
 
     $('#icm-batch-recheck-btn').on('click', function () {
-        if (!confirm('Er du sikker? Dette genkontrollerer alle produkters kategorier.')) {
+        if (!confirm(icm_admin.i18n.batch_confirm)) {
             return;
         }
 
@@ -194,7 +194,7 @@
         })
         .done(function (response) {
             if (!response.success) {
-                $('#icm-batch-status').text('Fejl: ' + (response.data || 'Ukendt fejl'));
+                $('#icm-batch-status').text(icm_admin.i18n.error_prefix + ' ' + (response.data || icm_admin.i18n.unknown_error));
                 $('#icm-batch-recheck-btn').prop('disabled', false);
                 return;
             }
@@ -205,21 +205,31 @@
 
             var pct = data.total > 0 ? Math.round((data.processed / data.total) * 100) : 100;
             $('#icm-progress-fill').css('width', pct + '%');
-            $('#icm-batch-status').text(
-                data.processed + ' af ' + data.total + ' produkter behandlet. ' +
-                batchTotalRemapped + ' omdirigeret, ' + batchTotalUnmapped + ' umappede.'
-            );
+            $('#icm-batch-status').text(sprintfLite(icm_admin.i18n.batch_status, [
+                data.processed, data.total, batchTotalRemapped, batchTotalUnmapped
+            ]));
 
             if (data.has_more) {
                 doBatchRecheck(data.next_offset);
             } else {
-                $('#icm-batch-status').append(' Faerdigt!');
+                $('#icm-batch-status').append(document.createTextNode(' ' + icm_admin.i18n.batch_done));
                 $('#icm-batch-recheck-btn').prop('disabled', false);
             }
         })
         .fail(function () {
-            $('#icm-batch-status').text('AJAX-fejl. Proev igen.');
+            $('#icm-batch-status').text(icm_admin.i18n.ajax_error);
             $('#icm-batch-recheck-btn').prop('disabled', false);
+        });
+    }
+
+    /* ───────────────────────────────────────────────
+     *  Helper: minimal sprintf for %1$s..%4$s placeholders
+     * ─────────────────────────────────────────────── */
+
+    function sprintfLite(template, args) {
+        return template.replace(/%(\d+)\$s/g, function (m, n) {
+            var v = args[parseInt(n, 10) - 1];
+            return v === undefined ? m : String(v);
         });
     }
 

@@ -48,14 +48,18 @@ class ICM_Admin {
         $url = admin_url( 'admin.php?page=icm-category-mapper' );
         ?>
         <div class="notice notice-info is-dismissible">
-            <h3 style="margin-top:10px;">Tak fordi du installerede Icecat Category Mapper!</h3>
+            <h3 style="margin-top:10px;"><?php esc_html_e( 'Thank you for installing Icecat Category Mapper!', 'icecat-category-mapper' ); ?></h3>
             <p>
-                Pluginet har oprettet en reference-liste over popul&aelig;re Icecat-kategorier.
-                N&aelig;ste skridt: G&aring; til <a href="<?php echo esc_url( $url ); ?>"><strong>WooCommerce &raquo; Icecat Mapper</strong></a>
-                og tildel hver Icecat-kategori en af dine egne WooCommerce-kategorier.
+                <?php
+                printf(
+                    /* translators: %s: link to the plugin admin page. */
+                    esc_html__( 'The plugin has created a reference list of popular Icecat categories. Next step: Go to %s and assign each Icecat category to one of your own WooCommerce categories.', 'icecat-category-mapper' ),
+                    '<a href="' . esc_url( $url ) . '"><strong>' . esc_html__( 'WooCommerce » Icecat Mapper', 'icecat-category-mapper' ) . '</strong></a>'
+                );
+                ?>
             </p>
             <p>
-                <a href="<?php echo esc_url( $url ); ?>" class="button button-primary">Start opsaetning</a>
+                <a href="<?php echo esc_url( $url ); ?>" class="button button-primary"><?php esc_html_e( 'Start setup', 'icecat-category-mapper' ); ?></a>
             </p>
         </div>
         <?php
@@ -76,8 +80,8 @@ class ICM_Admin {
     public function add_menu_page(): void {
         add_submenu_page(
             'woocommerce',
-            'Icecat Kategori-mapper',
-            'Icecat Mapper',
+            __( 'Icecat Category Mapper', 'icecat-category-mapper' ),
+            __( 'Icecat Mapper', 'icecat-category-mapper' ),
             'manage_woocommerce',
             'icm-category-mapper',
             [ $this, 'render_page' ]
@@ -111,17 +115,28 @@ class ICM_Admin {
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce'    => wp_create_nonce( 'icm_admin_nonce' ),
             'i18n'     => [
-                'confirm_delete'  => 'Er du sikker paa du vil slette denne mapping?',
-                'confirm_reset'   => 'Er du sikker? Dette sletter alle mappings og genindsaetter standarder.',
-                'confirm_clear'   => 'Er du sikker paa du vil rydde hele loggen?',
-                'fetching'        => 'Henter Icecat kategorier...',
-                'fetch_done'      => 'Icecat kategorier hentet!',
-                'fetch_error'     => 'Fejl ved hentning af kategorier.',
-                'testing'         => 'Tester forbindelse...',
-                'test_ok'         => 'Forbindelse OK!',
-                'test_fail'       => 'Forbindelsesfejl.',
-                'rechecking'      => 'Genkontrollerer produkter...',
-                'recheck_done'    => 'Genkontrol faerdig!',
+                'confirm_delete'  => __( 'Are you sure you want to delete this mapping?', 'icecat-category-mapper' ),
+                'confirm_reset'   => __( 'Are you sure? This deletes all mappings and re-inserts the defaults.', 'icecat-category-mapper' ),
+                'confirm_clear'   => __( 'Are you sure you want to clear the entire log?', 'icecat-category-mapper' ),
+                'fetching'        => __( 'Fetching Icecat categories...', 'icecat-category-mapper' ),
+                'fetch_done'      => __( 'Icecat categories fetched!', 'icecat-category-mapper' ),
+                'fetch_error'     => __( 'Error fetching categories.', 'icecat-category-mapper' ),
+                'fetch_button'    => __( 'Fetch Icecat categories', 'icecat-category-mapper' ),
+                /* translators: 1: date/time the cache was fetched, 2: number of cached categories. */
+                'cache_status'    => __( 'Icecat cache: %1$s (%2$s categories)', 'icecat-category-mapper' ),
+                'no_results'      => __( 'No results', 'icecat-category-mapper' ),
+                'testing'         => __( 'Testing connection...', 'icecat-category-mapper' ),
+                'test_ok'         => __( 'Connection OK!', 'icecat-category-mapper' ),
+                'test_fail'       => __( 'Connection error.', 'icecat-category-mapper' ),
+                'rechecking'      => __( 'Rechecking products...', 'icecat-category-mapper' ),
+                'recheck_done'    => __( 'Recheck finished!', 'icecat-category-mapper' ),
+                'batch_confirm'   => __( 'Are you sure? This rechecks the categories of all products.', 'icecat-category-mapper' ),
+                'error_prefix'    => __( 'Error:', 'icecat-category-mapper' ),
+                'unknown_error'   => __( 'Unknown error', 'icecat-category-mapper' ),
+                /* translators: 1: products processed, 2: total products, 3: remapped count, 4: unmapped count. */
+                'batch_status'    => __( '%1$s of %2$s products processed. %3$s remapped, %4$s unmapped.', 'icecat-category-mapper' ),
+                'batch_done'      => __( 'Done!', 'icecat-category-mapper' ),
+                'ajax_error'      => __( 'AJAX error. Please try again.', 'icecat-category-mapper' ),
             ],
         ] );
     }
@@ -139,16 +154,16 @@ class ICM_Admin {
 
         ?>
         <div class="wrap icm-wrap">
-            <h1>Icecat Kategori-mapper</h1>
+            <h1><?php esc_html_e( 'Icecat Category Mapper', 'icecat-category-mapper' ); ?></h1>
 
             <nav class="nav-tab-wrapper">
                 <a href="<?php echo esc_url( $this->tab_url( 'mappings' ) ); ?>"
                    class="nav-tab <?php echo $current_tab === 'mappings' ? 'nav-tab-active' : ''; ?>">
-                    Mappinger
+                    <?php esc_html_e( 'Mappings', 'icecat-category-mapper' ); ?>
                 </a>
                 <a href="<?php echo esc_url( $this->tab_url( 'unmapped' ) ); ?>"
                    class="nav-tab <?php echo $current_tab === 'unmapped' ? 'nav-tab-active' : ''; ?>">
-                    Ikke-mappede
+                    <?php esc_html_e( 'Unmapped', 'icecat-category-mapper' ); ?>
                     <?php
                     $unmapped_count = ICM_DB::count_unmapped();
                     if ( $unmapped_count > 0 ) :
@@ -158,11 +173,11 @@ class ICM_Admin {
                 </a>
                 <a href="<?php echo esc_url( $this->tab_url( 'settings' ) ); ?>"
                    class="nav-tab <?php echo $current_tab === 'settings' ? 'nav-tab-active' : ''; ?>">
-                    Indstillinger
+                    <?php esc_html_e( 'Settings', 'icecat-category-mapper' ); ?>
                 </a>
                 <a href="<?php echo esc_url( $this->tab_url( 'log' ) ); ?>"
                    class="nav-tab <?php echo $current_tab === 'log' ? 'nav-tab-active' : ''; ?>">
-                    Log
+                    <?php esc_html_e( 'Log', 'icecat-category-mapper' ); ?>
                 </a>
             </nav>
 
@@ -199,7 +214,7 @@ class ICM_Admin {
         check_admin_referer( 'icm_save_mapping' );
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_die( 'Ingen adgang.' );
+            wp_die( esc_html__( 'You do not have permission to do this.', 'icecat-category-mapper' ) );
         }
 
         $mapping_id        = (int) ( $_POST['mapping_id'] ?? 0 );
@@ -240,7 +255,7 @@ class ICM_Admin {
         check_admin_referer( 'icm_delete_mapping' );
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_die( 'Ingen adgang.' );
+            wp_die( esc_html__( 'You do not have permission to do this.', 'icecat-category-mapper' ) );
         }
 
         $mapping_id = (int) ( $_GET['mapping_id'] ?? 0 );
@@ -259,7 +274,7 @@ class ICM_Admin {
         check_admin_referer( 'icm_save_settings' );
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_die( 'Ingen adgang.' );
+            wp_die( esc_html__( 'You do not have permission to do this.', 'icecat-category-mapper' ) );
         }
 
         update_option( 'icm_icecat_username', sanitize_text_field( $_POST['icm_icecat_username'] ?? '' ) );
@@ -295,7 +310,7 @@ class ICM_Admin {
         check_admin_referer( 'icm_reset_defaults' );
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_die( 'Ingen adgang.' );
+            wp_die( esc_html__( 'You do not have permission to do this.', 'icecat-category-mapper' ) );
         }
 
         ICM_DB::delete_all_mappings();
@@ -313,7 +328,7 @@ class ICM_Admin {
         check_admin_referer( 'icm_clear_log' );
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_die( 'Ingen adgang.' );
+            wp_die( esc_html__( 'You do not have permission to do this.', 'icecat-category-mapper' ) );
         }
 
         ICM_DB::clear_log();
@@ -329,7 +344,7 @@ class ICM_Admin {
         check_admin_referer( 'icm_quick_map' );
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_die( 'Ingen adgang.' );
+            wp_die( esc_html__( 'You do not have permission to do this.', 'icecat-category-mapper' ) );
         }
 
         $unmapped_id     = (int) ( $_POST['unmapped_id'] ?? 0 );
@@ -370,7 +385,7 @@ class ICM_Admin {
         check_ajax_referer( 'icm_admin_nonce', 'nonce' );
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_send_json_error( 'Ingen adgang.' );
+            wp_send_json_error( __( 'You do not have permission to do this.', 'icecat-category-mapper' ) );
         }
 
         $result = ICM_Icecat_Fetcher::fetch_categories();
@@ -391,9 +406,9 @@ class ICM_Admin {
     public function ajax_search_icecat(): void {
         check_ajax_referer( 'icm_admin_nonce', 'nonce' );
 
-        // Capability-check (de tre andre AJAX-handlers har den; her manglede den).
+        // Capability check (the three other AJAX handlers have it; it was missing here).
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_send_json_error( 'Ingen adgang.' );
+            wp_send_json_error( __( 'You do not have permission to do this.', 'icecat-category-mapper' ) );
         }
 
         $query   = sanitize_text_field( $_POST['query'] ?? '' );
@@ -409,7 +424,7 @@ class ICM_Admin {
         check_ajax_referer( 'icm_admin_nonce', 'nonce' );
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_send_json_error( 'Ingen adgang.' );
+            wp_send_json_error( __( 'You do not have permission to do this.', 'icecat-category-mapper' ) );
         }
 
         $result = ICM_Icecat_Fetcher::test_connection();
@@ -418,7 +433,7 @@ class ICM_Admin {
             wp_send_json_error( $result->get_error_message() );
         }
 
-        wp_send_json_success( 'Forbindelse OK!' );
+        wp_send_json_success( __( 'Connection OK!', 'icecat-category-mapper' ) );
     }
 
     /**
@@ -428,7 +443,7 @@ class ICM_Admin {
         check_ajax_referer( 'icm_admin_nonce', 'nonce' );
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_send_json_error( 'Ingen adgang.' );
+            wp_send_json_error( __( 'You do not have permission to do this.', 'icecat-category-mapper' ) );
         }
 
         $offset   = (int) ( $_POST['offset'] ?? 0 );
@@ -490,12 +505,12 @@ class ICM_Admin {
      */
     private function show_admin_message( string $msg_code ): void {
         $messages = [
-            'mapping_added'   => [ 'success', 'Mapping tilfojet.' ],
-            'mapping_updated' => [ 'success', 'Mapping opdateret.' ],
-            'mapping_deleted' => [ 'success', 'Mapping slettet.' ],
-            'settings_saved'  => [ 'success', 'Indstillinger gemt.' ],
-            'defaults_reset'  => [ 'success', 'Standardmappings gendannet.' ],
-            'log_cleared'     => [ 'success', 'Log ryddet.' ],
+            'mapping_added'   => [ 'success', __( 'Mapping added.', 'icecat-category-mapper' ) ],
+            'mapping_updated' => [ 'success', __( 'Mapping updated.', 'icecat-category-mapper' ) ],
+            'mapping_deleted' => [ 'success', __( 'Mapping deleted.', 'icecat-category-mapper' ) ],
+            'settings_saved'  => [ 'success', __( 'Settings saved.', 'icecat-category-mapper' ) ],
+            'defaults_reset'  => [ 'success', __( 'Default mappings restored.', 'icecat-category-mapper' ) ],
+            'log_cleared'     => [ 'success', __( 'Log cleared.', 'icecat-category-mapper' ) ],
         ];
 
         if ( isset( $messages[ $msg_code ] ) ) {

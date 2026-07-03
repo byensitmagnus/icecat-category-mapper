@@ -40,10 +40,10 @@ class ICM_Mapper {
         // Get current product_cat terms
         $terms = wp_get_object_terms( $product_id, 'product_cat' );
         if ( is_wp_error( $terms ) || empty( $terms ) ) {
-            // Produkter helt uden kategori (fx stregkode-titel-kladder i import-batchen) ville
-            // ellers forsvinde fra al rapportering — registrér dem så de kan aktioneres i "Ikke-mappede".
+            // Products without any category (e.g. barcode-title drafts in an import batch) would
+            // otherwise vanish from all reporting — record them so they can be actioned under "Unmapped".
             if ( ! is_wp_error( $terms ) ) {
-                ICM_DB::record_unmapped_by_name( '(ingen kategori)' );
+                ICM_DB::record_unmapped_by_name( '(no category)' ); // Stable sentinel — translated at render time only
             }
             return $result;
         }
@@ -51,8 +51,8 @@ class ICM_Mapper {
         $product_title   = get_the_title( $product_id );
         $protected_slugs = self::get_protected_slugs();
 
-        // Tæl ikke-beskyttede (= kilde-)termer. Strategi 1 (produkt-meta-Icecat-ID) er kun entydig
-        // ved præcis én kilde-term; ved flere falder vi tilbage på navne-match pr. term.
+        // Count non-protected (= source) terms. Strategy 1 (product meta Icecat ID) is only
+        // unambiguous with exactly one source term; with more we fall back to per-term name matching.
         $non_protected = 0;
         foreach ( $terms as $t ) {
             if ( ! in_array( $t->slug, $protected_slugs, true ) ) { $non_protected++; }
@@ -130,20 +130,20 @@ class ICM_Mapper {
      *   3. Fuzzy name match (LIKE)
      */
     private static function find_mapping_for_term( WP_Term $term, int $product_id, bool $use_meta_strategy = true ): ?array {
-        // Normalisér term-navnet FØR matching: Icecat/EANrunner-termer indeholder literal
-        // HTML-entities (fx "Headphones &amp; Headsets") som ellers ALDRIG matcher seed/mappings
-        // ("Headphones & Headsets") — hverken eksakt eller fuzzy. Uden dette fejler hele formålet
-        // stille for alle "&"-kategorier (headsets er en kernekategori).
+        // Normalize the term name BEFORE matching: Icecat/EANrunner terms contain literal
+        // HTML entities (e.g. "Headphones &amp; Headsets") that would otherwise NEVER match the
+        // seed/mappings ("Headphones & Headsets") — neither exact nor fuzzy. Without this, the whole
+        // point fails silently for all "&" categories (headsets are a core category).
         $name = html_entity_decode( $term->name, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
         $name = trim( preg_replace( '/\s+/', ' ', $name ) );
 
-        // Strategi 1 (meta-Icecat-ID) er kun ENTYDIG når produktet har præcis én kilde-term.
-        // Med flere termer ville samme produkt-meta-ID matche dem ALLE til samme mål → kollaps.
+        // Strategy 1 (meta Icecat ID) is only UNAMBIGUOUS when the product has exactly one source
+        // term. With multiple terms, the same product meta ID would match them ALL to the same target → collapse.
         $icecat_id = $use_meta_strategy ? (int) self::get_icecat_id_from_meta( $product_id ) : 0;
 
-        // Cache-nøglen SKAL inkludere meta-ID'et. Ellers (nøgle kun på term_id) genbruges
-        // produkt #1's ID-baserede mapping forkert for ALLE efterfølgende produkter med samme
-        // term i en bulk-import — stille fejl-mapping på den primære/mest præcise vej.
+        // The cache key MUST include the meta ID. Otherwise (key on term_id only), product #1's
+        // ID-based mapping would incorrectly be reused for ALL subsequent products with the same
+        // term in a bulk import — silent mis-mapping on the primary/most precise path.
         $cache_key = 'term_' . $term->term_id . '_ic_' . $icecat_id;
         if ( array_key_exists( $cache_key, self::$lookup_cache ) ) {
             return self::$lookup_cache[ $cache_key ];
@@ -151,17 +151,17 @@ class ICM_Mapper {
 
         $mapping = null;
 
-        // Strategi 1: Icecat-ID i post-meta
+        // Strategy 1: Icecat ID from post meta
         if ( $icecat_id ) {
             $mapping = ICM_DB::get_mapping_by_icecat_id( $icecat_id );
         }
 
-        // Strategi 2: Eksakt navne-match (decoded navn)
+        // Strategy 2: Exact name match (decoded name)
         if ( ! $mapping ) {
             $mapping = ICM_DB::get_mapping_by_icecat_name( $name );
         }
 
-        // Strategi 3: Fuzzy navne-match (decoded navn)
+        // Strategy 3: Fuzzy name match (decoded name)
         if ( ! $mapping ) {
             $mapping = ICM_DB::get_mapping_by_fuzzy_name( $name );
         }
@@ -197,8 +197,8 @@ class ICM_Mapper {
      * Handle an unmapped category based on admin settings.
      */
     private static function handle_unmapped( int $product_id, string $product_title, WP_Term $term, int $icecat_id ): void {
-        // Decode term-navnet så unmapped-tabellen + loggen ikke forurenes med HTML-entities
-        // (én logisk kategori = én række: "Headphones & Headsets", ikke "...&amp; Headsets").
+        // Decode the term name so the unmapped table + log are not polluted with HTML entities
+        // (one logical category = one row: "Headphones & Headsets", not "...&amp; Headsets").
         $term_name = trim( preg_replace( '/\s+/', ' ', html_entity_decode( $term->name, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) );
 
         // Record the unmapped category

@@ -21,31 +21,38 @@ $total_items = ICM_DB::count_unmapped();
 $total_pages = ceil( $total_items / $per_page );
 
 $woo_categories = ICM_Admin::get_woo_categories_dropdown();
+
+$date_format = get_option( 'date_format', 'Y-m-d' );
 ?>
 
 <?php if ( $total_items === 0 ) : ?>
     <div class="icm-empty-state">
-        <p>Ingen umappede kategorier endnu.</p>
+        <p><?php esc_html_e( 'No unmapped categories yet.', 'icecat-category-mapper' ); ?></p>
         <p class="description">
-            Naar produkter importeres med Icecat-kategorier der ikke har en mapping,
-            vises de her saa du kan tildele dem den rette Byens IT-kategori.
+            <?php esc_html_e( 'When products are imported with Icecat categories that have no mapping, they appear here so you can assign them the right WooCommerce category.', 'icecat-category-mapper' ); ?>
         </p>
     </div>
 <?php else : ?>
     <p class="icm-stats">
-        <strong><?php echo $total_items; ?></strong> umappede kategorier fundet.
-        Brug "Quick-map" knappen for hurtigt at tildele en Byens IT-kategori.
+        <?php
+        printf(
+            /* translators: %s: number of unmapped categories. */
+            wp_kses( _n( '<strong>%s</strong> unmapped category found.', '<strong>%s</strong> unmapped categories found.', $total_items, 'icecat-category-mapper' ), [ 'strong' => [] ] ),
+            esc_html( number_format_i18n( $total_items ) )
+        );
+        ?>
+        <?php esc_html_e( 'Use the quick-map button to quickly assign a WooCommerce category.', 'icecat-category-mapper' ); ?>
     </p>
 
     <table class="wp-list-table widefat fixed striped icm-table">
         <thead>
             <tr>
-                <th class="icm-col-id">Icecat ID</th>
-                <th class="icm-col-name">Icecat Kategori</th>
-                <th class="icm-col-count">Antal produkter</th>
-                <th class="icm-col-date">Foerst set</th>
-                <th class="icm-col-date">Sidst set</th>
-                <th class="icm-col-quickmap">Quick-map</th>
+                <th class="icm-col-id"><?php esc_html_e( 'Icecat ID', 'icecat-category-mapper' ); ?></th>
+                <th class="icm-col-name"><?php esc_html_e( 'Icecat category', 'icecat-category-mapper' ); ?></th>
+                <th class="icm-col-count"><?php esc_html_e( 'Products', 'icecat-category-mapper' ); ?></th>
+                <th class="icm-col-date"><?php esc_html_e( 'First seen', 'icecat-category-mapper' ); ?></th>
+                <th class="icm-col-date"><?php esc_html_e( 'Last seen', 'icecat-category-mapper' ); ?></th>
+                <th class="icm-col-quickmap"><?php esc_html_e( 'Quick-map', 'icecat-category-mapper' ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -55,20 +62,26 @@ $woo_categories = ICM_Admin::get_woo_categories_dropdown();
                         <?php if ( (int) $item['icecat_cat_id'] > 0 ) : ?>
                             <code><?php echo esc_html( $item['icecat_cat_id'] ); ?></code>
                         <?php else : ?>
-                            <span class="icm-unknown">Ukendt</span>
+                            <span class="icm-unknown"><?php esc_html_e( 'Unknown', 'icecat-category-mapper' ); ?></span>
                         <?php endif; ?>
                     </td>
                     <td class="icm-col-name">
-                        <strong><?php echo esc_html( $item['icecat_cat_name'] ); ?></strong>
+                        <?php
+                        // '(no category)' is stored as a locale-independent sentinel — translate for display only
+                        $icm_display_name = $item['icecat_cat_name'] === '(no category)'
+                            ? __( '(no category)', 'icecat-category-mapper' )
+                            : $item['icecat_cat_name'];
+                        ?>
+                        <strong><?php echo esc_html( $icm_display_name ); ?></strong>
                     </td>
                     <td class="icm-col-count">
                         <?php echo esc_html( $item['product_count'] ); ?>
                     </td>
                     <td class="icm-col-date">
-                        <?php echo esc_html( wp_date( 'd. M Y', strtotime( $item['first_seen'] ) ) ); ?>
+                        <?php echo esc_html( wp_date( $date_format, strtotime( $item['first_seen'] ) ) ); ?>
                     </td>
                     <td class="icm-col-date">
-                        <?php echo esc_html( wp_date( 'd. M Y', strtotime( $item['last_seen'] ) ) ); ?>
+                        <?php echo esc_html( wp_date( $date_format, strtotime( $item['last_seen'] ) ) ); ?>
                     </td>
                     <td class="icm-col-quickmap">
                         <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
@@ -80,7 +93,7 @@ $woo_categories = ICM_Admin::get_woo_categories_dropdown();
                             <input type="hidden" name="icecat_cat_name" value="<?php echo esc_attr( $item['icecat_cat_name'] ); ?>">
 
                             <select name="woo_term_slug" required class="icm-quickmap-select">
-                                <option value="">Vaelg...</option>
+                                <option value=""><?php esc_html_e( 'Select...', 'icecat-category-mapper' ); ?></option>
                                 <?php foreach ( $woo_categories as $slug => $name ) : ?>
                                     <option value="<?php echo esc_attr( $slug ); ?>">
                                         <?php echo esc_html( $name ); ?>
@@ -88,7 +101,7 @@ $woo_categories = ICM_Admin::get_woo_categories_dropdown();
                                 <?php endforeach; ?>
                             </select>
 
-                            <button type="submit" class="button button-small button-primary">Map</button>
+                            <button type="submit" class="button button-small button-primary"><?php esc_html_e( 'Map', 'icecat-category-mapper' ); ?></button>
                         </form>
                     </td>
                 </tr>
@@ -106,8 +119,8 @@ $woo_categories = ICM_Admin::get_woo_categories_dropdown();
                     'format'    => '',
                     'total'     => $total_pages,
                     'current'   => $current_page,
-                    'prev_text' => '&laquo; Forrige',
-                    'next_text' => 'Naeste &raquo;',
+                    'prev_text' => '&laquo; ' . __( 'Previous', 'icecat-category-mapper' ),
+                    'next_text' => __( 'Next', 'icecat-category-mapper' ) . ' &raquo;',
                 ] );
                 ?>
             </div>

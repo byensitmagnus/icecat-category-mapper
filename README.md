@@ -1,41 +1,46 @@
 # Icecat Category Mapper for WooCommerce
 
-Automatisk mapping af Icecat-produktkategorier til dine egne WooCommerce-kategorier. Fuldt konfigurerbar via admin.
+Automatically maps Icecat product categories to your own WooCommerce categories. Fully configurable from the admin — works on any WordPress + WooCommerce shop.
 
-Importerer du produkter via Icecat-integrationer (fx EANrunner, Store Manager, WP All Import), kommer produkterne ind med Icecats engelske kategorinavne som "Keyboards", "Notebooks" og "Gaming Mice", der ikke matcher din webshops kategoristruktur. Dette plugin konverterer dem automatisk til dine egne WooCommerce-kategorier i samme øjeblik et produkt gemmes.
+If you import products through Icecat-based integrations (e.g. EANrunner, Store Manager, WP All Import), products come in with Icecat's English category names like "Keyboards", "Notebooks" and "Gaming Mice" that do not match your shop's category structure. This plugin converts them to your own WooCommerce categories automatically the moment a product is saved.
 
-## Funktioner
+## Features
 
-- **Plug-and-play** — fanger alle produkt-imports via `set_object_terms`-hook, uanset hvilken import-plugin der bruges
-- **Fuldt konfigurerbar** — map selv Icecat-kategorier til dine egne WooCommerce-kategorier via admin-UI
-- **Reference-bibliotek** — leveres med 50+ populære Icecat-kategorier præ-seedet (IDs + bilinguale navne)
-- **Icecat API-integration** — hent den fulde kategoriliste fra Open Icecat gratis
-- **3-lags matching** — Icecat-ID i post meta → eksakt navn → fuzzy match
-- **Beskyttede kategorier** — markér kategorier der aldrig skal remappes
-- **Fallback-adfærd** — behold, tildel fallback-kategori, eller fjern umappede kategorier
-- **Fuld logging** — se hvad der er remappet, hvornår, og hvilke kategorier der mangler mapping
-- **Batch recheck** — kør alle eksisterende produkter igennem mapperen
-- **HPOS-kompatibel** — deklareret kompatibilitet med High-Performance Order Storage
+- **Plug and play** — catches all product imports via the `set_object_terms` hook, regardless of which import plugin is used
+- **Fully configurable** — you map Icecat categories to your own WooCommerce categories in the admin UI (WooCommerce → Icecat Mapper)
+- **Reference library** — ships with 50+ popular Icecat categories pre-seeded (IDs + bilingual names)
+- **Icecat API integration** — fetch the full category list (~5,000+ categories) from Open Icecat for free
+- **3-tier matching** — Icecat ID in post meta → exact name → fuzzy match
+- **Protected categories** — mark categories that must never be remapped
+- **Fallback behavior** — keep, assign a fallback category, or remove unmapped categories
+- **Full logging** — see what was remapped, when, and which categories are missing a mapping
+- **Batch recheck** — run all existing products through the mapper
+- **Translatable** — English base language, complete Danish translation (da_DK) bundled, `.pot` template included for other languages
+- **HPOS compatible** — declared compatibility with High-Performance Order Storage
 
-## Krav
+## Requirements
 
 - WordPress 6.0+
-- WooCommerce (kræves aktivt)
+- WooCommerce (must be active)
 - PHP 7.4+
 
 ## Installation
 
-1. Download nyeste `icecat-category-mapper-*.zip` under [Releases](../../releases)
-2. Upload via **Plugins → Tilføj nyt plugin → Upload plugin**
-3. Aktivér pluginet
-4. Gå til **WooCommerce → Icecat Mapper** og konfigurér dine mappings
+1. Download the latest `icecat-category-mapper-*.zip` from [Releases](../../releases)
+2. Upload via **Plugins → Add New Plugin → Upload Plugin**
+3. Activate the plugin
+4. Go to **WooCommerce → Icecat Mapper** and configure your mappings
 
-Et Icecat-abonnement er ikke nødvendigt — pluginet leveres med 50+ præ-seedede kategorier. Vil du hente den fulde kategoriliste (~5.000+), kan du oprette en gratis Open Icecat-konto på icecat.com og indtaste credentials under **Indstillinger**.
+No Icecat subscription is required — the plugin ships with 50+ pre-seeded categories. To fetch the full category list, create a free Open Icecat account at icecat.com and enter your credentials under **Settings**.
+
+## Translations
+
+The base language is English. A full Danish translation is bundled and loads automatically when the site language is set to `da_DK`. To add another language, translate `languages/icecat-category-mapper.pot` and place the compiled `.mo` file in the `languages/` folder (or use a tool like Loco Translate).
 
 ## Changelog
 
-Se [readme.txt](readme.txt) for fuld changelog.
+See [readme.txt](readme.txt) for the full changelog.
 
-## Licens
+## License
 
-GPL v2 or later — se [LICENSE](LICENSE).
+GPL v2 or later — see [LICENSE](LICENSE).

@@ -1,0 +1,463 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Icecat Category Mapper 1.2.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: icecat-category-mapper\n"
+"Language: da_DK\n"
+"Language-Team: Danish\n"
+
+msgid "%1$s of %2$s products processed. %3$s remapped, %4$s unmapped."
+msgstr "%1$s af %2$s produkter behandlet. %3$s remappet, %4$s umappede."
+
+msgid "(no category)"
+msgstr "(ingen kategori)"
+
+msgid "(unchanged)"
+msgstr "(uændret)"
+
+msgid "+ Add new mapping"
+msgstr "+ Tilføj ny mapping"
+
+msgid "AJAX error. Please try again."
+msgstr "AJAX-fejl. Prøv igen."
+
+msgid "Action"
+msgstr "Handling"
+
+msgid "Actions"
+msgstr "Handlinger"
+
+msgid "Add mapping"
+msgstr "Tilføj mapping"
+
+msgid "Add new mapping"
+msgstr "Tilføj ny mapping"
+
+msgid "All"
+msgstr "Alle"
+
+msgid "Are you sure you want to clear the entire log?"
+msgstr "Er du sikker på, at du vil rydde hele loggen?"
+
+msgid "Are you sure you want to delete this mapping?"
+msgstr "Er du sikker på, at du vil slette denne mapping?"
+
+msgid "Are you sure? This deletes all mappings and re-inserts the defaults."
+msgstr "Er du sikker? Dette sletter alle mappings og genindsætter standarderne."
+
+msgid "Are you sure? This rechecks the categories of all products."
+msgstr "Er du sikker? Dette genkontrollerer alle produkters kategorier."
+
+msgid "Assign a default category"
+msgstr "Tildel en standard-kategori"
+
+msgid "Assign each Icecat category to one of your own WooCommerce categories to enable automatic remapping."
+msgstr "Tildel hver Icecat-kategori en af dine egne WooCommerce-kategorier for at aktivere automatisk remapping."
+
+msgid "Auto-remap"
+msgstr "Auto-remap"
+
+msgid "Cancel"
+msgstr "Annuller"
+
+msgid "Categories"
+msgstr "Kategorier"
+
+msgid "Choose the WooCommerce categories that should never be remapped by the plugin. Targets you have already configured in your mappings are protected automatically. Use this for existing categories you want left alone."
+msgstr "Vælg de WooCommerce-kategorier som aldrig skal remappes af pluginet. Targets du allerede har konfigureret i dine mappings, er automatisk beskyttet. Brug dette til eksisterende kategorier du vil have i fred."
+
+msgid "Clear log"
+msgstr "Ryd log"
+
+msgid "Configured"
+msgstr "Konfigurerede"
+
+msgid "Connection OK!"
+msgstr "Forbindelse OK!"
+
+msgid "Connection error."
+msgstr "Forbindelsesfejl."
+
+msgid "Connection error:"
+msgstr "Forbindelsesfejl:"
+
+msgid "Could not fetch Icecat categories:"
+msgstr "Kunne ikke hente Icecat-kategorier:"
+
+msgid "Could not parse the Icecat XML."
+msgstr "Kunne ikke parse Icecat-XML'en."
+
+msgid "Danish (8)"
+msgstr "Dansk (8)"
+
+msgid "Date"
+msgstr "Dato"
+
+msgid "Default"
+msgstr "Standard"
+
+msgid "Default mapping"
+msgstr "Standard-mapping"
+
+msgid "Default mappings restored."
+msgstr "Standardmappings gendannet."
+
+msgid "Delete"
+msgstr "Slet"
+
+msgid "Done!"
+msgstr "Færdig!"
+
+msgid "Dutch (5)"
+msgstr "Hollandsk (5)"
+
+msgid "Edit"
+msgstr "Rediger"
+
+msgid "Edit mapping"
+msgstr "Rediger mapping"
+
+msgid "Empty response from the Icecat API."
+msgstr "Tomt svar fra Icecat-API'et."
+
+msgid "Enable automatic category remapping on product import"
+msgstr "Aktivér automatisk kategori-remapping ved produktimport"
+
+msgid "English (1)"
+msgstr "Engelsk (1)"
+
+msgid "Error fetching categories."
+msgstr "Fejl ved hentning af kategorier."
+
+msgid "Error:"
+msgstr "Fejl:"
+
+msgid "Fallback"
+msgstr "Fallback"
+
+msgid "Fallback category"
+msgstr "Fallback-kategori"
+
+msgid "Fallback for unmapped"
+msgstr "Fallback for umappede"
+
+msgid "Fetch Icecat categories"
+msgstr "Hent Icecat-kategorier"
+
+msgid "Fetching Icecat categories..."
+msgstr "Henter Icecat-kategorier..."
+
+msgid "Finnish (11)"
+msgstr "Finsk (11)"
+
+msgid "First seen"
+msgstr "Først set"
+
+msgid "French (3)"
+msgstr "Fransk (3)"
+
+msgid "German (2)"
+msgstr "Tysk (2)"
+
+msgid "Hold Ctrl/Cmd to select multiple. Optional — leave empty for no extra protected categories."
+msgstr "Hold Ctrl/Cmd nede for at vælge flere. Valgfrit — tomt felt betyder ingen ekstra beskyttede kategorier."
+
+msgid "Icecat API"
+msgstr "Icecat API"
+
+msgid "Icecat Category Mapper"
+msgstr "Icecat Category Mapper"
+
+msgid "Icecat ID"
+msgstr "Icecat-ID"
+
+msgid "Icecat Mapper"
+msgstr "Icecat Mapper"
+
+msgid "Icecat cache:"
+msgstr "Icecat-cache:"
+
+msgid "Icecat cache: %1$s (%2$s categories)"
+msgstr "Icecat-cache: %1$s (%2$s kategorier)"
+
+msgid "Icecat categories fetched!"
+msgstr "Icecat-kategorier hentet!"
+
+msgid "Icecat category"
+msgstr "Icecat-kategori"
+
+msgid "Icecat category (English)"
+msgstr "Icecat-kategori (engelsk)"
+
+msgid "Icecat category ID"
+msgstr "Icecat kategori-ID"
+
+msgid "Icecat language ID for category names fetched from the API."
+msgstr "Icecat sprog-ID for kategorinavne der hentes fra API'et."
+
+msgid "Icecat username and password are required. Enter them under Settings."
+msgstr "Icecat-brugernavn og adgangskode er påkrævet. Angiv dem under Indstillinger."
+
+msgid "Icecat's numeric category ID."
+msgstr "Icecats numeriske kategori-ID."
+
+msgid "Invalid credentials (HTTP 401)."
+msgstr "Ugyldige loginoplysninger (HTTP 401)."
+
+msgid "Italian (6)"
+msgstr "Italiensk (6)"
+
+msgid "Keep"
+msgstr "Behold"
+
+msgid "Keep the Icecat category as is"
+msgstr "Bevar Icecat-kategorien som den er"
+
+msgid "Language ID"
+msgstr "Sprog-ID"
+
+msgid "Last seen"
+msgstr "Sidst set"
+
+msgid "Leave empty to keep the current password."
+msgstr "Lad stå tomt for at beholde den nuværende adgangskode."
+
+msgid "Localized name"
+msgstr "Lokaliseret navn"
+
+msgid "Log"
+msgstr "Log"
+
+msgid "Log cleared."
+msgstr "Log ryddet."
+
+msgid "Log entries older than this are automatically deleted daily."
+msgstr "Log-poster ældre end dette slettes automatisk dagligt."
+
+msgid "Log retention"
+msgstr "Log-opbevaring"
+
+msgid "Maintenance"
+msgstr "Vedligeholdelse"
+
+msgid "Map"
+msgstr "Map"
+
+msgid "Mapping added."
+msgstr "Mapping tilføjet."
+
+msgid "Mapping behavior"
+msgstr "Mapping-adfærd"
+
+msgid "Mapping deleted."
+msgstr "Mapping slettet."
+
+msgid "Mapping updated."
+msgstr "Mapping opdateret."
+
+msgid "Mappings"
+msgstr "Mappinger"
+
+msgid "Missing target"
+msgstr "Mangler target"
+
+msgid "Never fetched"
+msgstr "Aldrig hentet"
+
+msgid "Next"
+msgstr "Næste"
+
+msgid "No categories found in the Icecat XML."
+msgstr "Ingen kategorier fundet i Icecat-XML'en."
+
+msgid "No log entries found."
+msgstr "Ingen log-poster fundet."
+
+msgid "No mappings found."
+msgstr "Ingen mappinger fundet."
+
+msgid "No results"
+msgstr "Ingen resultater"
+
+msgid "No unmapped categories yet."
+msgstr "Ingen umappede kategorier endnu."
+
+msgid "Norwegian (10)"
+msgstr "Norsk (10)"
+
+msgid "Optional. The category name in the language configured under Settings. Also used for matching."
+msgstr "Valgfrit. Kategorinavnet på det sprog der er valgt under Indstillinger. Bruges også til matching."
+
+msgid "Password"
+msgstr "Adgangskode"
+
+msgid "Portuguese (7)"
+msgstr "Portugisisk (7)"
+
+msgid "Previous"
+msgstr "Forrige"
+
+msgid "Product"
+msgstr "Produkt"
+
+msgid "Products"
+msgstr "Produkter"
+
+msgid "Protected categories"
+msgstr "Beskyttede kategorier"
+
+msgid "Quick-map"
+msgstr "Quick-map"
+
+msgid "Recheck all products"
+msgstr "Genkontroller alle produkter"
+
+msgid "Recheck finished!"
+msgstr "Genkontrol færdig!"
+
+msgid "Recheck products"
+msgstr "Genkontroller produkter"
+
+msgid "Rechecking products..."
+msgstr "Genkontrollerer produkter..."
+
+msgid "Remapped"
+msgstr "Remappet"
+
+msgid "Remove"
+msgstr "Fjern"
+
+msgid "Remove the unmapped category entirely"
+msgstr "Fjern den umappede kategori helt"
+
+msgid "Reset defaults"
+msgstr "Nulstil standarder"
+
+msgid "Runs all existing products through the mapper. Useful after adding new mappings to fix already-imported products."
+msgstr "Kører alle eksisterende produkter igennem mapperen. Nyttigt efter tilføjelse af nye mappings for at rette allerede importerede produkter."
+
+msgid "Save settings"
+msgstr "Gem indstillinger"
+
+msgid "Search"
+msgstr "Søg"
+
+msgid "Search Icecat"
+msgstr "Søg i Icecat"
+
+msgid "Search mappings..."
+msgstr "Søg i mappinger..."
+
+msgid "Select..."
+msgstr "Vælg..."
+
+msgid "Settings"
+msgstr "Indstillinger"
+
+msgid "Settings saved."
+msgstr "Indstillinger gemt."
+
+msgid "Show only unconfigured"
+msgstr "Vis kun ukonfigurerede"
+
+msgid "Showing <strong>%1$s</strong> of <strong>%2$s</strong> mappings."
+msgstr "Viser <strong>%1$s</strong> af <strong>%2$s</strong> mappinger."
+
+msgid "Skipped"
+msgstr "Sprunget over"
+
+msgid "Spanish (4)"
+msgstr "Spansk (4)"
+
+msgid "Start setup"
+msgstr "Start opsætning"
+
+msgid "Swedish (9)"
+msgstr "Svensk (9)"
+
+msgid "Test connection"
+msgstr "Test forbindelse"
+
+msgid "Testing connection..."
+msgstr "Tester forbindelse..."
+
+msgid "Thank you for installing Icecat Category Mapper!"
+msgstr "Tak fordi du installerede Icecat Category Mapper!"
+
+msgid "The Icecat API returned HTTP %d. Check your credentials."
+msgstr "Icecat-API'et returnerede HTTP %d. Tjek dine loginoplysninger."
+
+msgid "The plugin has created a reference list of popular Icecat categories. Next step: Go to %s and assign each Icecat category to one of your own WooCommerce categories."
+msgstr "Pluginet har oprettet en referenceliste over populære Icecat-kategorier. Næste skridt: Gå til %s og tildel hver Icecat-kategori en af dine egne WooCommerce-kategorier."
+
+msgid "Unexpected HTTP status: %d"
+msgstr "Uventet HTTP-status: %d"
+
+msgid "Unknown"
+msgstr "Ukendt"
+
+msgid "Unknown error"
+msgstr "Ukendt fejl"
+
+msgid "Unmapped"
+msgstr "Ikke-mappede"
+
+msgid "Update mapping"
+msgstr "Opdater mapping"
+
+msgid "Use the quick-map button to quickly assign a WooCommerce category."
+msgstr "Brug quick-map-knappen til hurtigt at tildele en WooCommerce-kategori."
+
+msgid "Username"
+msgstr "Brugernavn"
+
+msgid "Username and password are missing."
+msgstr "Brugernavn og adgangskode mangler."
+
+msgid "When enabled, Icecat categories are automatically remapped to your WooCommerce categories when products are created or updated."
+msgstr "Når aktiveret, remappes Icecat-kategorier automatisk til dine WooCommerce-kategorier, når produkter oprettes og opdateres."
+
+msgid "When products are imported with Icecat categories that have no mapping, they appear here so you can assign them the right WooCommerce category."
+msgstr "Når produkter importeres med Icecat-kategorier der ikke har en mapping, vises de her, så du kan tildele dem den rette WooCommerce-kategori."
+
+msgid "WooCommerce category"
+msgstr "WooCommerce-kategori"
+
+msgid "WooCommerce » Icecat Mapper"
+msgstr "WooCommerce » Icecat Mapper"
+
+msgid "You do not have permission to do this."
+msgstr "Du har ikke tilladelse til dette."
+
+msgid "Your Open Icecat username."
+msgstr "Dit Open Icecat-brugernavn."
+
+msgid "days"
+msgstr "dage"
+
+msgid "requires WooCommerce to be installed and activated."
+msgstr "kræver at WooCommerce er installeret og aktiveret."
+
+msgid "— Select category —"
+msgstr "— Vælg kategori —"
+
+msgid "— no target —"
+msgstr "— mangler target —"
+
+msgid "%d mapping is missing a target category."
+msgid_plural "%d mappings are missing a target category."
+msgstr[0] "%d mapping mangler en target-kategori."
+msgstr[1] "%d mappinger mangler en target-kategori."
+
+msgid "%s category"
+msgid_plural "%s categories"
+msgstr[0] "%s kategori"
+msgstr[1] "%s kategorier"
+
+msgid "<strong>%s</strong> unmapped category found."
+msgid_plural "<strong>%s</strong> unmapped categories found."
+msgstr[0] "<strong>%s</strong> umappet kategori fundet."
+msgstr[1] "<strong>%s</strong> umappede kategorier fundet."

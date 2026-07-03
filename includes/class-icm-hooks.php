@@ -24,13 +24,13 @@ class ICM_Hooks {
      * Register all hooks.
      */
     public function register(): void {
-        // ── Daily maintenance cron — registreres ALTID ──
-        // Cron-eventet schedules ved aktivering og af-schedules kun ved deaktivering. Lå handleren
-        // efter early-returnet nedenfor, ville log-purgen stoppe stille når auto-remap slås fra
-        // (legitimt fx efter en engangs-import) → log-tabellen vokser uendeligt på et live site.
+        // ── Daily maintenance cron — ALWAYS registered ──
+        // The cron event is scheduled on activation and only unscheduled on deactivation. If this
+        // handler sat below the early return, the log purge would silently stop when auto-remap is
+        // turned off (legitimate e.g. after a one-off import) → the log table grows forever on a live site.
         add_action( 'icm_daily_maintenance', [ $this, 'daily_maintenance' ] );
 
-        // Selve remappingen er gated på auto-remap-indstillingen.
+        // The remapping itself is gated on the auto-remap setting.
         if ( ! get_option( 'icm_auto_remap_enabled', 1 ) ) {
             return;
         }

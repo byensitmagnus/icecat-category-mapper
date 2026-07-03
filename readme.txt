@@ -1,119 +1,132 @@
 === Icecat Category Mapper for WooCommerce ===
-Contributors: icecatmapperteam
+Contributors: byensit
 Tags: woocommerce, icecat, categories, product import, mapping
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Automatisk mapping af Icecat produktkategorier til dine egne WooCommerce-kategorier. Fuldt konfigurerbar via admin.
+Automatically maps Icecat product categories to your own WooCommerce categories. Fully configurable from the admin.
 
 == Description ==
 
-Hvis du importerer produkter via Icecat-integrationer (fx EANrunner, Store Manager, WP All Import) kender du problemet: produkterne kommer ind med Icecats engelske kategorinavne som "Keyboards", "Notebooks", "Gaming Mice", der ikke matcher din webshops kategoristruktur.
+If you import products through Icecat-based integrations (e.g. EANrunner, Store Manager, WP All Import), you know the problem: products come in with Icecat's English category names like "Keyboards", "Notebooks", "Gaming Mice" that do not match your shop's category structure.
 
-**Icecat Category Mapper** loeser det ved automatisk at konvertere Icecat-kategorier til dine egne WooCommerce-kategorier i samme oejeblik et produkt gemmes.
+**Icecat Category Mapper** solves this by automatically converting Icecat categories to your own WooCommerce categories the moment a product is saved.
 
-= Funktioner =
+= Features =
 
-* **Plug-and-play** — fanger alle produkt-imports via `set_object_terms`-hook, uanset hvilken import-plugin der bruges
-* **Fuldt konfigurerbar** — du mapper selv Icecat-kategorier til dine egne WooCommerce-kategorier via admin-UI
-* **Reference-bibliotek** — leveres med 50+ popul&aelig;re Icecat-kategorier pr&aelig;-seedet (IDs + bilingual navne)
-* **Icecat API-integration** — hent den fulde kategoriliste fra Open Icecat gratis
-* **3-lags matching** — Icecat ID i post meta &rarr; eksakt navn &rarr; fuzzy match
-* **Beskyttede kategorier** — markér kategorier der aldrig skal remappes
-* **Fallback-adf&aelig;rd** — behold, tildel fallback-kategori, eller fjern umappede kategorier
-* **Fuld logging** — se hvad der er remappet, hvorn&aring;r, og hvilke kategorier der mangler mapping
-* **Batch recheck** — k&oslash;r alle eksisterende produkter igennem mapperen
-* **Multisprog** — understoetter 11 Icecat-sprog (engelsk, dansk, tysk, fransk, spansk, osv.)
+* **Plug and play** — catches all product imports via the `set_object_terms` hook, regardless of which import plugin is used
+* **Fully configurable** — you map Icecat categories to your own WooCommerce categories in the admin UI
+* **Reference library** — ships with 50+ popular Icecat categories pre-seeded (IDs + bilingual names)
+* **Icecat API integration** — fetch the full category list from Open Icecat for free
+* **3-tier matching** — Icecat ID in post meta &rarr; exact name &rarr; fuzzy match
+* **Protected categories** — mark categories that must never be remapped
+* **Fallback behavior** — keep, assign a fallback category, or remove unmapped categories
+* **Full logging** — see what was remapped, when, and which categories are missing a mapping
+* **Batch recheck** — run all existing products through the mapper
+* **Multilingual** — fully translatable (English base, Danish translation included) and supports 11 Icecat languages for fetched category names
 
-= Hvordan det fungerer =
+= How it works =
 
-1. Installer og aktiver pluginet
-2. G&aring; til **WooCommerce &raquo; Icecat Mapper**
-3. Tildel hver Icecat-kategori en af dine egne WooCommerce-kategorier via dropdown
-4. Pluginet remapper nu automatisk alle produkter der importeres med disse Icecat-kategorier
+1. Install and activate the plugin
+2. Go to **WooCommerce &raquo; Icecat Mapper**
+3. Assign each Icecat category one of your own WooCommerce categories via the dropdown
+4. The plugin now automatically remaps all products imported with those Icecat categories
 
-Du kan ogs&aring; konfigurere:
-- Icecat API-credentials (brugernavn/password) for at hente nye kategorier
-- Beskyttede kategorier der aldrig remappes
-- Fallback-adfaerd for umappede kategorier
-- Log-opbevaring (antal dage)
+You can also configure:
+- Icecat API credentials (username/password) to fetch new categories
+- Protected categories that are never remapped
+- Fallback behavior for unmapped categories
+- Log retention (number of days)
 
-= Sikkerhed =
+= Security =
 
-* Alle database-queries bruger prepared statements
-* Alle admin-handlers checker nonces og capabilities
-* Re-entrancy guard forhindrer uendelige loekker
-* XMLReader streaming parser for memory-effektiv XML-parsing
+* All database queries use prepared statements
+* All admin handlers check nonces and capabilities
+* A re-entrancy guard prevents infinite loops
+* XMLReader streaming parser for memory-efficient XML parsing
 
 == Installation ==
 
-1. Upload `icecat-category-mapper.zip` via **Plugins &raquo; Tilf&oslash;j nyt plugin &raquo; Upload plugin**
-2. Aktiver pluginet
-3. G&aring; til **WooCommerce &raquo; Icecat Mapper** for at konfigurere mappings
+1. Upload `icecat-category-mapper.zip` via **Plugins &raquo; Add New Plugin &raquo; Upload Plugin**
+2. Activate the plugin
+3. Go to **WooCommerce &raquo; Icecat Mapper** to configure your mappings
 
-Alternativt kan du unzippe indholdet manuelt i `/wp-content/plugins/` og aktivere via **Plugins**-siden.
+Alternatively, unzip the contents manually into `/wp-content/plugins/` and activate from the **Plugins** page.
 
 == Frequently Asked Questions ==
 
-= Skal jeg have et Icecat-abonnement? =
+= Do I need an Icecat subscription? =
 
-Nej, for grundl&aelig;ggende funktionalitet er det ikke n&oslash;dvendigt. Pluginet leveres med 50+ popul&aelig;re Icecat-kategorier pr&aelig;-seedet, som du bare skal mappe til dine WooCommerce-kategorier.
+No, not for basic functionality. The plugin ships with 50+ popular Icecat categories pre-seeded — you just map them to your WooCommerce categories.
 
-Hvis du vil hente den fulde Icecat-kategoriliste (~5.000+ kategorier), kan du oprette en gratis Open Icecat-konto p&aring; icecat.com.
+If you want to fetch the full Icecat category list (~5,000+ categories), you can create a free Open Icecat account at icecat.com.
 
-= Hvordan fanger pluginet produkt-imports? =
+= How does the plugin catch product imports? =
 
-Pluginet lytter p&aring; WordPress' `set_object_terms`-action, som fyres hver gang en product-category tildeles et produkt — uanset hvilken import-plugin der bruges. Det betyder det fungerer med:
+The plugin listens to WordPress' `set_object_terms` action, which fires every time a product category is assigned to a product — regardless of which import plugin is used. That means it works with:
 
 - WooCommerce CSV Importer
 - WooCommerce REST API
 - WP All Import
 - EANrunner
-- Alle andre plugins der bruger `wp_set_object_terms()`
+- Any other plugin that uses `wp_set_object_terms()`
 
-= Hvad hvis jeg allerede har produkter importeret forkert? =
+= What if I already have incorrectly imported products? =
 
-G&aring; til **Indstillinger**-tabben og klik p&aring; **Genkontroller alle produkter**. Det k&oslash;rer alle eksisterende produkter igennem mapperen og remapper dem ifoelge din konfiguration.
+Go to the **Settings** tab and click **Recheck all products**. It runs all existing products through the mapper and remaps them according to your configuration.
 
-= Kan jeg tilf&oslash;je egne Icecat-kategorier der ikke er i pakken? =
+= Can I add my own Icecat categories that are not in the bundle? =
 
-Ja. G&aring; til **Mappinger &raquo; Tilf&oslash;j ny mapping** og indtast Icecat-kategori-ID og navn manuelt, eller hent dem via Icecat API.
+Yes. Go to **Mappings &raquo; Add new mapping** and enter the Icecat category ID and name manually, or fetch them via the Icecat API.
+
+= Is the plugin translatable? =
+
+Yes. The base language is English and a full Danish translation (da_DK) is bundled. A `.pot` template is included in the `languages/` folder for additional translations.
 
 == Screenshots ==
 
-1. Mappings-oversigt med filter og s&oslash;gning
-2. Tilfoej/rediger mapping med Icecat-s&oslash;gning
-3. Indstillinger med beskyttede kategorier og fallback-adfaerd
-4. Detaljeret log over alle remappings
+1. Mappings overview with filter and search
+2. Add/edit mapping with Icecat search
+3. Settings with protected categories and fallback behavior
+4. Detailed log of all remappings
 
 == Changelog ==
 
+= 1.2.0 =
+* NEW: Full internationalization — all user-facing strings (PHP + JavaScript) now use WordPress i18n with the `icecat-category-mapper` text domain
+* NEW: English base language so the plugin works on any WordPress site; complete Danish translation (da_DK) bundled, plus a `.pot` template for other languages
+* CHANGE: Shop-specific "Byens IT" labels replaced with generic "WooCommerce category"
+* CHANGE: "Danish name" field renamed to "Localized name" — it holds the category name in whatever Icecat language is configured under Settings
+* CHANGE: Log/date columns now follow the site's date format setting instead of a hardcoded Danish format
+* CHANGE: Danish reference names in the seed library now use proper Danish characters (æ/ø/å)
+* FIX: Translations are loaded before the "requires WooCommerce" notice so it is shown in the site language
+* FIX: XML parser language fallback aligned with the activation default (English)
+
 = 1.1.0 =
-* FIX (blocker): term-navne med HTML-entity (&) — fx "Headphones & Headsets" — matchede aldrig mod mappings; navnet decodes nu foer matching (eksakt + fuzzy)
-* FIX (blocker): lookup-cachen noegles nu paa term_id + meta-Icecat-ID, saa produkt #1's mapping ikke genbruges forkert for resten under en bulk-import
-* FIX: cron-handleren (log-purge) registreres nu uafhaengigt af auto-remap-indstillingen — loggen vokser ikke laengere uendeligt naar auto-remap slaas fra
-* FIX: Strategi 1 (produkt-meta-Icecat-ID) bruges kun naar produktet har én kilde-term — flere kategorier kollapses ikke laengere til samme maal
-* FIX: fuzzy-match har nu min-laengde-guard (>= 4 tegn) + deterministisk ORDER BY CHAR_LENGTH — faerre vilkaarlige false-positives
-* FIX: WooCommerce default-kategori ("Ukategoriseret") beskyttes altid — produkter uden andre kategorier mister ikke deres kategori ved fallback=remove
-* NEW: HPOS-kompatibilitet deklareret (fjerner WooCommerce's "ikke kompatibel"-banner)
-* NEW: kombineret "Headphones & Headsets"-seed-raekke (det navn Icecat/EANrunner faktisk leverer)
-* IMPROVE: idempotent seeding — nye default-kategorier propageres ved version-upgrade, admins konfigurerede maal bevares
-* IMPROVE: capability-check paa ajax_search_icecat; produkter helt uden kategori registreres i "Ikke-mappede"; eksplicit autoload=false paa kategori-cachen
+* FIX (blocker): term names containing an HTML entity (&) — e.g. "Headphones & Headsets" — never matched mappings; the name is now decoded before matching (exact + fuzzy)
+* FIX (blocker): the lookup cache is now keyed on term_id + meta Icecat ID, so product #1's mapping is no longer wrongly reused for the rest of a bulk import
+* FIX: the cron handler (log purge) is registered independently of the auto-remap setting — the log no longer grows forever when auto-remap is off
+* FIX: Strategy 1 (product meta Icecat ID) is only used when the product has a single source term — multiple categories no longer collapse into the same target
+* FIX: fuzzy matching now has a minimum-length guard (>= 4 characters) + deterministic ORDER BY CHAR_LENGTH — fewer arbitrary false positives
+* FIX: the WooCommerce default category ("Uncategorized") is always protected — products with no other categories no longer lose their category with fallback=remove
+* NEW: HPOS compatibility declared (removes WooCommerce's "not compatible" banner)
+* NEW: combined "Headphones & Headsets" seed row (the name Icecat/EANrunner actually delivers)
+* IMPROVE: idempotent seeding — new default categories propagate on version upgrades, the admin's configured targets are preserved
+* IMPROVE: capability check on ajax_search_icecat; products with no category at all are recorded under "Unmapped"; explicit autoload=false on the category cache
 
 = 1.0.0 =
-* Foerste release
-* Pre-seedet med 50+ popul&aelig;re Icecat-kategorier
-* Fuld admin-UI med 4 tabs (Mappinger, Ikke-mappede, Indstillinger, Log)
-* Icecat API-integration med streaming XML-parser
-* Batch recheck af eksisterende produkter
-* Beskyttede kategorier konfigurerbar via settings
-* Dansk UI med engelsk fallback
+* First release
+* Pre-seeded with 50+ popular Icecat categories
+* Full admin UI with 4 tabs (Mappings, Unmapped, Settings, Log)
+* Icecat API integration with streaming XML parser
+* Batch recheck of existing products
+* Protected categories configurable via settings
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-Foerste release.
+= 1.2.0 =
+The admin UI base language is now English with a bundled Danish translation. Danish shops: set the site language to da_DK (Settings &raquo; General) to keep the Danish UI.
