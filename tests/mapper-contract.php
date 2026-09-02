@@ -122,6 +122,41 @@ try {
     wp_update_post( [ 'ID' => $laptop, 'post_status' => 'publish' ] );
     $res = ICM_Mapper::remap_product_categories( $laptop );
     $check( 'Rule target draft hides the product', get_post_status( $laptop ) === 'draft' && $slugs_of( $laptop ) === [ 'icm-other' ] && ( $res['remapped'][0]['to'] ?? '' ) === 'draft', get_post_status( $laptop ) );
+
+    // 8. A SEEDED Icecat ID is never trusted on its own (EANrunner 2026-09-02: their 193 = Gaming
+    //    Controllers, our seed said 193 = Mice). Product carries meta ID 9990001 (seeded on the
+    //    Zotherboards row) + an unknown name → must NOT land in motherboards.
+    update_option( 'icm_title_rules', '' );
+    $wpdb->update( ICM_DB::mappings_table(), [ 'is_default' => 1 ], [ 'icecat_cat_id' => 9990001 ], [ '%d' ], [ '%d' ] );
+    $ctrl_src = $term( 'ICM Zontrollers', 'icm-zontrollers' );
+    $ctrl     = $product( 'Some gamepad', [ $ctrl_src ] );
+    update_post_meta( $ctrl, '_icecat_category_id', 9990001 );
+    ICM_Mapper::clear_cache();
+    ICM_Mapper::remap_product_categories( $ctrl );
+    $check( 'Seeded ID alone is not trusted', $slugs_of( $ctrl ) === [ 'icm-zontrollers' ], implode( ',', $slugs_of( $ctrl ) ) );
+
+    // 9. Name + ID on the same product → the row LEARNS the real ID and the seeded squatter loses it.
+    $mice_row_before = ICM_DB::get_mapping_by_icecat_name( 'ICM Computer Zonitors' );
+    $learner = $product( 'LG monitor with id', [ $mons_src ] );      // term "Zonitors" → whole-word → Computer Zonitors row
+    update_post_meta( $learner, '_icecat_category_id', 9990001 );  // the ID the seed wrongly gave to Zotherboards
+    ICM_Mapper::clear_cache();
+    // Learning happens on the exact-name path, so give the product the exact row name as its term.
+    $exact_src = $term( 'ICM Computer Zonitors', 'icm-computer-zonitors' );
+    ICM_Hooks::set_remapping( true ); wp_set_object_terms( $learner, [ $exact_src ], 'product_cat' ); ICM_Hooks::set_remapping( false );
+    ICM_Mapper::remap_product_categories( $learner );
+    $learned  = ICM_DB::get_mapping_by_icecat_id( 9990001 );
+    $squatter = ICM_DB::get_mapping_by_icecat_name( 'ICM Zotherboards' );
+    $check( 'Row learns the ID from name+ID product; seeded squatter released',
+        $learned && $learned['icecat_cat_name'] === 'ICM Computer Zonitors' && (int) $learned['is_default'] === 0
+        && (int) ( $squatter['icecat_cat_id'] ?? -1 ) >= 990000000 && $slugs_of( $learner ) === [ 'icm-test-mon', 'icm-test-parent' ],
+        ( $learned['icecat_cat_name'] ?? 'none' ) . ' squatter=' . ( $squatter['icecat_cat_id'] ?? '?' ) );
+
+    // 10. From now on the LEARNED ID is trusted by itself (unknown name, known ID → mapped).
+    $by_id = $product( 'Unknown name, known id', [ $ctrl_src ] );
+    update_post_meta( $by_id, '_icecat_category_id', 9990001 );
+    ICM_Mapper::clear_cache();
+    ICM_Mapper::remap_product_categories( $by_id );
+    $check( 'Learned ID is trusted on its own', $slugs_of( $by_id ) === [ 'icm-test-mon', 'icm-test-parent' ], implode( ',', $slugs_of( $by_id ) ) );
 } finally {
     // ── Cleanup: everything this script created, nothing else ──
     update_option( 'icm_title_rules', $saved_rules );

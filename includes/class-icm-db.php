@@ -49,6 +49,40 @@ class ICM_DB {
     }
 
     /**
+     * A product arrived with a category NAME we know and an Icecat ID we did not: store the ID on
+     * that row and mark it as learned (is_default = 0), so ID lookups may trust it from now on.
+     * A seeded row that already squats on this ID loses it (set to 0) — by definition that seed was wrong.
+     *
+     * @return array The updated mapping row.
+     */
+    public static function learn_icecat_id( array $mapping, int $icecat_cat_id ): array {
+        global $wpdb;
+        $table = self::mappings_table();
+
+        $squatter = self::get_mapping_by_icecat_id( $icecat_cat_id );
+        if ( $squatter && (int) $squatter['id'] !== (int) $mapping['id'] ) {
+            if ( empty( $squatter['is_default'] ) ) {
+                return $mapping; // another LEARNED row owns this ID — leave both alone, log will show the name path
+            }
+            // icecat_cat_id is UNIQUE and 0 is already taken by name-only rows, so the released seed
+            // gets a synthetic ID far above Icecat's range (their taxonomy is < 100 000).
+            // ponytail: synthetic 99xxxxxxx ids instead of a nullable column — migrate if it ever matters.
+            $wpdb->update( $table, [ 'icecat_cat_id' => 990000000 + (int) $squatter['id'] ], [ 'id' => (int) $squatter['id'] ], [ '%d' ], [ '%d' ] );
+        }
+
+        $wpdb->update(
+            $table,
+            [ 'icecat_cat_id' => $icecat_cat_id, 'is_default' => 0 ],
+            [ 'id' => (int) $mapping['id'] ],
+            [ '%d', '%d' ],
+            [ '%d' ]
+        );
+        $mapping['icecat_cat_id'] = $icecat_cat_id;
+        $mapping['is_default']    = 0;
+        return $mapping;
+    }
+
+    /**
      * Lookup mapping by Icecat category name (exact, case-insensitive).
      * Checks both English and Danish names.
      */

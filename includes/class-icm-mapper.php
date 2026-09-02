@@ -164,14 +164,25 @@ class ICM_Mapper {
 
         $mapping = null;
 
-        // Strategy 1: Icecat ID from post meta
+        // Strategy 1: Icecat ID from post meta — but ONLY an ID this table has LEARNED from a
+        // product that carried both the ID and the category name. The seeded library IDs are
+        // not trustworthy: EANrunner reported (2026-09-02) that at Icecat 193 = Gaming Controllers
+        // and 1060 = Game Consoles, while our seed said 193 = Mice. Trusting a seeded ID would
+        // file a controller under mice the day an importer starts sending real IDs.
         if ( $icecat_id ) {
             $mapping = ICM_DB::get_mapping_by_icecat_id( $icecat_id );
+            if ( $mapping && ! empty( $mapping['is_default'] ) ) {
+                $mapping = null; // seeded, unverified — fall through to the name
+            }
         }
 
-        // Strategy 2: Exact name match (decoded name)
+        // Strategy 2: Exact name match (decoded name). When the product also carries an ID,
+        // the row learns it here — from then on Strategy 1 matches this category by number.
         if ( ! $mapping ) {
             $mapping = ICM_DB::get_mapping_by_icecat_name( $name );
+            if ( $mapping && $icecat_id && (int) $mapping['icecat_cat_id'] !== $icecat_id ) {
+                $mapping = ICM_DB::learn_icecat_id( $mapping, $icecat_id );
+            }
         }
 
         // Strategy 3: Fuzzy name match (decoded name)

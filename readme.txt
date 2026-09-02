@@ -4,7 +4,7 @@ Tags: woocommerce, icecat, categories, product import, mapping
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +95,9 @@ Yes. The base language is English and a full Danish translation (da_DK) is bundl
 4. Detailed log of all remappings
 
 == Changelog ==
+
+= 1.4.1 =
+* FIX: Icecat IDs from the bundled library are no longer trusted on their own. EANrunner reported (2026-09-02) that Icecat's real IDs differ (193 = Gaming Controllers, not Mice). A mapping row now LEARNS its ID from the first product that carries both the category name and `_icecat_category_id`; only learned IDs are matched by number. A seeded row squatting on a learned ID is released.
 
 = 1.4.0 =
 * FIX: Fuzzy name matching is now whole-word and unambiguous. The old substring match turned Icecat's catch-all "Other" into "M-other-boards" and filed 14 gaming mice under motherboards. Names that match several mappings with different targets now land in "Unmapped" instead of a silent wrong category.
