@@ -42,6 +42,7 @@ $date_format = get_option( 'date_format', 'Y-m-d' );
         );
         ?>
         <?php esc_html_e( 'Use the quick-map button to quickly assign a WooCommerce category.', 'icecat-category-mapper' ); ?>
+        <?php esc_html_e( 'Er rækken en af butikkens EGNE kategorier (fx Gaming computer, CS2), så klik "Beskyt" — den røres aldrig af remapperen og forsvinder fra listen.', 'icecat-category-mapper' ); ?>
     </p>
 
     <table class="wp-list-table widefat fixed striped icm-table">
@@ -102,6 +103,15 @@ $date_format = get_option( 'date_format', 'Y-m-d' );
                             </select>
 
                             <button type="submit" class="button button-small button-primary"><?php esc_html_e( 'Map', 'icecat-category-mapper' ); ?></button>
+                        </form>
+                        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
+                              class="icm-protect-form" style="display:inline-block;margin-left:6px;">
+                            <?php wp_nonce_field( 'icm_protect_category' ); ?>
+                            <input type="hidden" name="action" value="icm_protect_category">
+                            <input type="hidden" name="unmapped_id" value="<?php echo esc_attr( $item['id'] ); ?>">
+                            <input type="hidden" name="icecat_cat_name" value="<?php echo esc_attr( $item['icecat_cat_name'] ); ?>">
+                            <button type="submit" class="button button-small"
+                                    title="<?php esc_attr_e( 'Butikkens egen kategori — beskyt den mod remapping og fjern fra denne liste', 'icecat-category-mapper' ); ?>"><?php esc_html_e( 'Beskyt', 'icecat-category-mapper' ); ?></button>
                         </form>
                     </td>
                 </tr>

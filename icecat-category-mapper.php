@@ -3,7 +3,7 @@
  * Plugin Name: Icecat Category Mapper for WooCommerce
  * Plugin URI:  https://github.com/byensitmagnus/icecat-category-mapper
  * Description: Automatically maps Icecat product categories to your own WooCommerce categories. Fully configurable from the admin.
- * Version:     1.2.0
+ * Version:     1.3.0
  * Author:      Byens IT
  * Author URI:  https://github.com/byensitmagnus
  * Text Domain: icecat-category-mapper
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'ICM_VERSION', '1.2.0' );
+define( 'ICM_VERSION', '1.3.0' );
 define( 'ICM_PLUGIN_FILE', __FILE__ );
 define( 'ICM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ICM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

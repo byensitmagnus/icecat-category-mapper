@@ -65,6 +65,12 @@ class ICM_Mapper {
         foreach ( $terms as $term ) {
             // Skip protected categories (user-configured + auto-derived from mapping targets)
             if ( in_array( $term->slug, $protected_slugs, true ) ) {
+                // Heal a missing parent chain on already-remapped products: their target term
+                // (e.g. Headsets) is protected and skipped, so without this they would never
+                // receive their ancestors (e.g. "Gaming tilbehoer") on a recheck.
+                foreach ( get_ancestors( $term->term_id, 'product_cat' ) as $ancestor_id ) {
+                    $terms_to_add[] = (int) $ancestor_id;
+                }
                 $result['skipped'][] = $term->slug;
                 continue;
             }
@@ -80,6 +86,13 @@ class ICM_Mapper {
                 if ( $target_term ) {
                     $terms_to_remove[] = $term->term_id;
                     $terms_to_add[]    = $target_term->term_id;
+
+                    // Also assign the FULL parent chain (e.g. Headsets -> also "Gaming tilbehoer").
+                    // Mirrors how the shop's existing products are categorized (child + parent);
+                    // without this the product is missing from parent-category widgets/counts.
+                    foreach ( get_ancestors( $target_term->term_id, 'product_cat' ) as $ancestor_id ) {
+                        $terms_to_add[] = (int) $ancestor_id;
+                    }
 
                     ICM_Logger::log_remap(
                         $product_id,
@@ -227,7 +240,12 @@ class ICM_Mapper {
                 $fallback_term = get_term_by( 'slug', $fallback_slug, 'product_cat' );
                 if ( $fallback_term ) {
                     wp_remove_object_terms( $product_id, $term->term_id, 'product_cat' );
-                    wp_set_object_terms( $product_id, [ $fallback_term->term_id ], 'product_cat', true );
+                    // Include the parent chain — same pattern as the remap path.
+                    $fallback_ids = array_merge(
+                        [ (int) $fallback_term->term_id ],
+                        array_map( 'intval', get_ancestors( $fallback_term->term_id, 'product_cat' ) )
+                    );
+                    wp_set_object_terms( $product_id, $fallback_ids, 'product_cat', true );
                 }
             }
         } elseif ( $fallback === 'remove' ) {

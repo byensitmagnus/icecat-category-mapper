@@ -96,6 +96,11 @@ Yes. The base language is English and a full Danish translation (da_DK) is bundl
 
 == Changelog ==
 
+= 1.3.0 =
+* NEW: Remapping now also assigns the FULL parent chain (e.g. Headsets -> also "Gaming tilbehoer") on both the remap and fallback paths — matches how the shop's existing products are categorized
+* NEW: "Beskyt" button on the Unmapped tab — one click protects the shop's own categories (Gaming computer, CS2, ...) from the remapper and removes them from the list
+* NOTE: Configuring a mapping does NOT remap existing products by itself — run "Recheck all products" (Settings) afterwards; future imports are remapped instantly
+
 = 1.2.0 =
 * NEW: Full internationalization — all user-facing strings (PHP + JavaScript) now use WordPress i18n with the `icecat-category-mapper` text domain
 * NEW: English base language so the plugin works on any WordPress site; complete Danish translation (da_DK) bundled, plus a `.pot` template for other languages

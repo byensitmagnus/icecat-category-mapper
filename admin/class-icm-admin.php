@@ -25,6 +25,7 @@ class ICM_Admin {
         add_action( 'admin_post_icm_reset_defaults', [ $this, 'handle_reset_defaults' ] );
         add_action( 'admin_post_icm_clear_log', [ $this, 'handle_clear_log' ] );
         add_action( 'admin_post_icm_quick_map', [ $this, 'handle_quick_map' ] );
+        add_action( 'admin_post_icm_protect_category', [ $this, 'handle_protect_category' ] );
 
         // AJAX handlers
         add_action( 'wp_ajax_icm_fetch_icecat', [ $this, 'ajax_fetch_icecat' ] );
@@ -374,6 +375,41 @@ class ICM_Admin {
         exit;
     }
 
+    /**
+     * Handle "Beskyt" from the unmapped tab.
+     *
+     * The shop's OWN categories (e.g. Gaming computer, CS2) show up as noise in the
+     * unmapped list because they are not mapping targets. Protect = add the slug to
+     * icm_protected_slugs (never touched by the remapper) + remove the row.
+     */
+    public function handle_protect_category(): void {
+        check_admin_referer( 'icm_protect_category' );
+
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            wp_die( esc_html__( 'Ingen adgang.', 'icecat-category-mapper' ) );
+        }
+
+        $unmapped_id = (int) ( $_POST['unmapped_id'] ?? 0 );
+        $cat_name    = sanitize_text_field( wp_unslash( $_POST['icecat_cat_name'] ?? '' ) );
+
+        $term = get_term_by( 'name', $cat_name, 'product_cat' );
+        if ( $term instanceof WP_Term ) {
+            $raw   = (string) get_option( 'icm_protected_slugs', '' );
+            $slugs = array_filter( array_map( 'trim', explode( ',', $raw ) ) );
+            if ( ! in_array( $term->slug, $slugs, true ) ) {
+                $slugs[] = $term->slug;
+                update_option( 'icm_protected_slugs', implode( ',', $slugs ) );
+            }
+        }
+        // Remove the row either way (if no WC category matches the name, it is pure noise).
+        if ( $unmapped_id > 0 ) {
+            ICM_DB::delete_unmapped( $unmapped_id );
+        }
+
+        wp_safe_redirect( add_query_arg( 'icm_msg', 'category_protected', $this->tab_url( 'unmapped' ) ) );
+        exit;
+    }
+
     /* ───────────────────────────────────────────────
      *  AJAX Handlers
      * ─────────────────────────────────────────────── */
@@ -511,6 +547,7 @@ class ICM_Admin {
             'settings_saved'  => [ 'success', __( 'Settings saved.', 'icecat-category-mapper' ) ],
             'defaults_reset'  => [ 'success', __( 'Default mappings restored.', 'icecat-category-mapper' ) ],
             'log_cleared'     => [ 'success', __( 'Log cleared.', 'icecat-category-mapper' ) ],
+            'category_protected' => [ 'success', __( 'Kategori beskyttet — den røres aldrig af remapperen og vises ikke længere her.', 'icecat-category-mapper' ) ],
         ];
 
         if ( isset( $messages[ $msg_code ] ) ) {
