@@ -39,6 +39,16 @@ wp eval-file wp-content/plugins/icecat-category-mapper/tests/mapper-contract.php
 
 Creates temporary categories/products, asserts the mapping decisions, cleans up, and exits non-zero on failure.
 
+## Testing
+
+On a staging site with the plugin active:
+
+```
+wp eval-file wp-content/plugins/icecat-category-mapper/tests/mapper-contract.php
+```
+
+Creates temporary categories/products, asserts the mapping decisions, cleans up, and exits non-zero on failure.
+
 ## Requirements
 
 - WordPress 6.0+

@@ -154,7 +154,7 @@ $icecat_languages = [
             <td>
                 <textarea id="icm_title_rules" name="icm_title_rules" rows="10" class="large-text code"
                           placeholder="mouse-pads | mouse\s?pad&#10;mice | \bmouse\b"><?php echo esc_textarea( $title_rules ); ?></textarea>
-                <p class="description"><?php esc_html_e( 'Lines starting with # are comments. Invalid regex lines are skipped.', 'icecat-category-mapper' ); ?></p>
+                <p class="description"><?php esc_html_e( 'Lines starting with # are comments. Invalid regex lines are skipped. Use the target "draft" to hide matching products instead of categorising them.', 'icecat-category-mapper' ); ?></p>
             </td>
         </tr>
     </table>

@@ -114,6 +114,14 @@ try {
     ICM_Mapper::remap_product_categories( $hidden );
     $logged = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM " . ICM_DB::log_table() . " WHERE product_id = %d AND action = 'drafted'", $hidden ) );
     $check( 'Fallback draft: unmapped product becomes draft + logged', get_post_status( $hidden ) === 'draft' && $logged === 1 && $slugs_of( $hidden ) === [ 'icm-other' ], get_post_status( $hidden ) . ' logged=' . $logged );
+
+    // 7. Rule target "draft": a matching title hides the product even with fallback=keep.
+    update_option( 'icm_fallback_behavior', 'keep' );
+    update_option( 'icm_title_rules', "draft | thinkpad\nicm-test-mice | \\bmouse\\b\n" );
+    $laptop = $product( 'Lenovo ThinkPad L15 Gen 3 512 GB SSD', [ $other_id ] );
+    wp_update_post( [ 'ID' => $laptop, 'post_status' => 'publish' ] );
+    $res = ICM_Mapper::remap_product_categories( $laptop );
+    $check( 'Rule target draft hides the product', get_post_status( $laptop ) === 'draft' && $slugs_of( $laptop ) === [ 'icm-other' ] && ( $res['remapped'][0]['to'] ?? '' ) === 'draft', get_post_status( $laptop ) );
 } finally {
     // ── Cleanup: everything this script created, nothing else ──
     update_option( 'icm_title_rules', $saved_rules );

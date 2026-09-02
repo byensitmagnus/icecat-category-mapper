@@ -218,6 +218,11 @@ class ICM_Mapper {
         // "Computer Components") can never be mapped per category — only the product
         // title tells a mouse from a fan. Admin-configured regex → target slug.
         $rule_slug = self::match_title_rule( $product_title );
+        if ( $rule_slug === 'draft' ) {
+            // Rule target "draft" = this product type is not wanted in the shop at all (e.g. laptops).
+            self::draft_product( $product_id, $product_title, $icecat_id, $term_name );
+            return 'draft';
+        }
         if ( $rule_slug ) {
             $target = get_term_by( 'slug', $rule_slug, 'product_cat' );
             if ( $target ) {
