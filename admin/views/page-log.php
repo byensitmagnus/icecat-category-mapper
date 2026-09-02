@@ -110,6 +110,7 @@ $date_format = get_option( 'date_format', 'Y-m-d' ) . ' H:i';
                             'remapped' => '<span class="icm-action-badge icm-action-remapped">' . esc_html__( 'Remapped', 'icecat-category-mapper' ) . '</span>',
                             'unmapped' => '<span class="icm-action-badge icm-action-unmapped">' . esc_html__( 'Unmapped', 'icecat-category-mapper' ) . '</span>',
                             'skipped'  => '<span class="icm-action-badge icm-action-skipped">' . esc_html__( 'Skipped', 'icecat-category-mapper' ) . '</span>',
+                            'title_rule' => '<span class="icm-action-badge icm-action-remapped">' . esc_html__( 'Title rule', 'icecat-category-mapper' ) . '</span>',
                         ];
                         echo $action_labels[ $entry['action'] ] ?? esc_html( $entry['action'] );
                         ?>

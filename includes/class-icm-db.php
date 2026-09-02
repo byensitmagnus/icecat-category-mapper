@@ -87,22 +87,39 @@ class ICM_DB {
         $table = self::mappings_table();
         $like  = '%' . $wpdb->esc_like( $name ) . '%';
 
-        // ORDER BY CHAR_LENGTH ASC → the SHORTEST (most specific) stored name containing the
-        // query wins deterministically. Without ORDER BY, the LIMIT 1 winner was effectively arbitrary (DB order).
-        $row = $wpdb->get_row(
+        // LIKE is only a cheap pre-filter. The real test is a WHOLE-WORD match in PHP:
+        // Icecat's catch-all "Other" is a substring of "M-other-boards", and on 2026-08-28 that
+        // sent 14 gaming mice into the motherboard category. A wrong fuzzy hit is invisible;
+        // an unmapped row is visible and fixable — so when in doubt, return nothing.
+        $rows = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT * FROM {$table}
                  WHERE icecat_cat_name LIKE %s
                     OR icecat_cat_name_da LIKE %s
-                 ORDER BY CHAR_LENGTH( icecat_cat_name ) ASC
-                 LIMIT 1",
+                 ORDER BY CHAR_LENGTH( icecat_cat_name ) ASC",
                 $like,
                 $like
             ),
             ARRAY_A
         );
 
-        return $row ?: null;
+        $regex   = '/(?<![\p{L}\p{N}])' . preg_quote( $name, '/' ) . '(?![\p{L}\p{N}])/iu';
+        $targets = [];
+        $best    = null;
+        foreach ( (array) $rows as $row ) {
+            if ( ! preg_match( $regex, $row['icecat_cat_name'] ) && ! preg_match( $regex, (string) $row['icecat_cat_name_da'] ) ) {
+                continue;
+            }
+            if ( $row['woo_term_slug'] === '' ) {
+                continue; // Unconfigured rows can neither win nor veto — they carry no target.
+            }
+            $targets[ $row['woo_term_slug'] ] = true;
+            $best = $best ?? $row;
+        }
+
+        // ponytail: "Monitors" → Computer Monitors + Gaming Monitors both → skaerme = fine.
+        // "Memory" → Memory Cards vs Memory Modules with different targets = ambiguous → null.
+        return count( $targets ) === 1 ? $best : null;
     }
 
     /**

@@ -117,14 +117,14 @@ class ICM_Mapper {
                     );
                     $result['unmapped'][] = $term->name;
                 }
-            } elseif ( $mapping ) {
-                // Mapping exists but target is empty — admin hasn't configured this yet
-                self::handle_unmapped( $product_id, $product_title, $term, (int) $mapping['icecat_cat_id'] );
-                $result['unmapped'][] = $term->name;
             } else {
-                // No mapping exists at all
-                self::handle_unmapped( $product_id, $product_title, $term, 0 );
-                $result['unmapped'][] = $term->name;
+                // Mapping missing, or exists with an empty target (admin hasn't configured it yet).
+                $rule_slug = self::handle_unmapped( $product_id, $product_title, $term, (int) ( $mapping['icecat_cat_id'] ?? 0 ) );
+                if ( $rule_slug ) {
+                    $result['remapped'][] = [ 'from' => $term->name, 'to' => $rule_slug ];
+                } else {
+                    $result['unmapped'][] = $term->name;
+                }
             }
         }
 
@@ -209,10 +209,24 @@ class ICM_Mapper {
     /**
      * Handle an unmapped category based on admin settings.
      */
-    private static function handle_unmapped( int $product_id, string $product_title, WP_Term $term, int $icecat_id ): void {
+    private static function handle_unmapped( int $product_id, string $product_title, WP_Term $term, int $icecat_id ): ?string {
         // Decode the term name so the unmapped table + log are not polluted with HTML entities
         // (one logical category = one row: "Headphones & Headsets", not "...&amp; Headsets").
         $term_name = trim( preg_replace( '/\s+/', ' ', html_entity_decode( $term->name, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) );
+
+        // Title rules first: catch-all Icecat categories ("Other", "Not Categorized",
+        // "Computer Components") can never be mapped per category — only the product
+        // title tells a mouse from a fan. Admin-configured regex → target slug.
+        $rule_slug = self::match_title_rule( $product_title );
+        if ( $rule_slug ) {
+            $target = get_term_by( 'slug', $rule_slug, 'product_cat' );
+            if ( $target ) {
+                $add_ids = array_merge( [ (int) $target->term_id ], array_map( 'intval', get_ancestors( $target->term_id, 'product_cat' ) ) );
+                self::apply_term_changes( $product_id, [ $term->term_id ], $add_ids );
+                ICM_Logger::log_remap( $product_id, $product_title, $icecat_id, $term_name, (int) $target->term_id, $rule_slug, 'title_rule' );
+                return $rule_slug;
+            }
+        }
 
         // Record the unmapped category
         if ( $icecat_id > 0 ) {
@@ -252,6 +266,43 @@ class ICM_Mapper {
             wp_remove_object_terms( $product_id, $term->term_id, 'product_cat' );
         }
         // 'keep' = do nothing, leave the Icecat term as-is
+        return null;
+    }
+
+    /**
+     * Match a product title against the admin's title rules (Settings → Title rules).
+     * One rule per line: `woo-slug | regex` — first match wins, case-insensitive, Unicode.
+     *
+     * @return string|null Target slug or null.
+     */
+    public static function match_title_rule( string $title ): ?string {
+        $title = html_entity_decode( $title, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+        foreach ( self::parse_title_rules( (string) get_option( 'icm_title_rules', '' ) ) as $rule ) {
+            if ( @preg_match( '/' . str_replace( '/', '\/', $rule[1] ) . '/iu', $title ) === 1 ) {
+                return $rule[0];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Parse the raw textarea into [ [slug, regex], ... ]. Blank lines and `#` comments are ignored.
+     *
+     * @return array<int, array{0:string,1:string}>
+     */
+    public static function parse_title_rules( string $raw ): array {
+        $rules = [];
+        foreach ( preg_split( '/\R/', $raw ) as $line ) {
+            $line = trim( $line );
+            if ( $line === '' || $line[0] === '#' || strpos( $line, '|' ) === false ) {
+                continue;
+            }
+            [ $slug, $regex ] = array_map( 'trim', explode( '|', $line, 2 ) );
+            if ( $slug !== '' && $regex !== '' ) {
+                $rules[] = [ sanitize_title( $slug ), $regex ];
+            }
+        }
+        return $rules;
     }
 
     /**

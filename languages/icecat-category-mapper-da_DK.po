@@ -461,3 +461,18 @@ msgid "<strong>%s</strong> unmapped category found."
 msgid_plural "<strong>%s</strong> unmapped categories found."
 msgstr[0] "<strong>%s</strong> umappet kategori fundet."
 msgstr[1] "<strong>%s</strong> umappede kategorier fundet."
+
+msgid "Title rules"
+msgstr "Titelregler"
+
+msgid "Rules"
+msgstr "Regler"
+
+msgid "Title rule"
+msgstr "Titelregel"
+
+msgid "Lines starting with # are comments. Invalid regex lines are skipped."
+msgstr "Linjer der starter med # er kommentarer. Ugyldige regex-linjer springes over."
+
+msgid "Used only when a category has no mapping — e.g. the Icecat catch-all \"Other\" or \"Not Categorized\", where only the product title tells a mouse from a fan. One rule per line: WooCommerce slug, a pipe, then a regular expression (case-insensitive). First match wins, so put specific rules (mouse pad) before general ones (mouse)."
+msgstr "Bruges kun når en kategori ingen mapping har — fx Icecats opsamlingskategorier \"Other\" og \"Not Categorized\", hvor kun produkttitlen kan skelne en mus fra en blæser. Én regel pr. linje: WooCommerce-slug, en lodret streg, og så et regulært udtryk (uden forskel på store/små bogstaver). Første match vinder, så sæt specifikke regler (musemåtte) før generelle (mus)."

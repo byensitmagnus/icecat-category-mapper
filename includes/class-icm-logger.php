@@ -18,7 +18,8 @@ class ICM_Logger {
         int $icecat_cat_id,
         string $icecat_cat_name,
         int $target_term_id,
-        string $target_slug
+        string $target_slug,
+        string $action = 'remapped'
     ): void {
         ICM_DB::insert_log( [
             'product_id'      => $product_id,
@@ -27,7 +28,7 @@ class ICM_Logger {
             'icecat_cat_name' => $icecat_cat_name,
             'target_term_id'  => $target_term_id,
             'target_slug'     => $target_slug,
-            'action'          => 'remapped',
+            'action'          => $action,
         ] );
     }
 

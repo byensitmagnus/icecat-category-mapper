@@ -292,6 +292,10 @@ class ICM_Admin {
         update_option( 'icm_fallback_category', sanitize_title( $_POST['icm_fallback_category'] ?? '' ) );
         update_option( 'icm_log_retention_days', max( 1, (int) ( $_POST['icm_log_retention_days'] ?? 90 ) ) );
 
+        // Title rules — free text, one `slug | regex` per line. Only strip tags; regex needs its punctuation.
+        $rules_raw = wp_kses( wp_unslash( $_POST['icm_title_rules'] ?? '' ), [] );
+        update_option( 'icm_title_rules', trim( str_replace( "\r", '', $rules_raw ) ) );
+
         // Protected slugs — multi-select saved as comma-separated list
         $protected = $_POST['icm_protected_slugs'] ?? [];
         if ( is_array( $protected ) ) {

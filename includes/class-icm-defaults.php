@@ -134,6 +134,22 @@ class ICM_Defaults {
             "SELECT DISTINCT woo_term_slug FROM {$table} WHERE woo_term_slug != ''"
         );
 
+        // Ancestors of every target are protected too: the remapper assigns the full parent
+        // chain (e.g. Komponenter above Bundkort), so those parents show up on every remapped
+        // product. Without this they were re-evaluated on every save and logged as "unmapped"
+        // (10,000+ noise rows for "Komponenter" alone) — and could be stripped by fallback=remove.
+        foreach ( (array) $target_slugs as $slug ) {
+            $term = get_term_by( 'slug', $slug, 'product_cat' );
+            if ( $term ) {
+                foreach ( get_ancestors( $term->term_id, 'product_cat' ) as $ancestor_id ) {
+                    $ancestor = get_term( $ancestor_id, 'product_cat' );
+                    if ( $ancestor && ! is_wp_error( $ancestor ) ) {
+                        $target_slugs[] = $ancestor->slug;
+                    }
+                }
+            }
+        }
+
         // The WooCommerce default category ("Uncategorized") is ALWAYS protected: otherwise
         // products that ONLY have the default category would get it stripped with
         // fallback='remove' and end up without any product_cat (disappearing from archives/feeds).

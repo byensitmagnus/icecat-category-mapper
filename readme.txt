@@ -4,7 +4,7 @@ Tags: woocommerce, icecat, categories, product import, mapping
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +95,12 @@ Yes. The base language is English and a full Danish translation (da_DK) is bundl
 4. Detailed log of all remappings
 
 == Changelog ==
+
+= 1.4.0 =
+* FIX: Fuzzy name matching is now whole-word and unambiguous. The old substring match turned Icecat's catch-all "Other" into "M-other-boards" and filed 14 gaming mice under motherboards. Names that match several mappings with different targets now land in "Unmapped" instead of a silent wrong category.
+* FIX: Ancestors of mapping targets (e.g. a "Components" parent) are protected automatically — no more re-evaluation and "unmapped" log noise on every product save.
+* NEW: Title rules (Settings) — `slug | regex` lines applied when a category has no mapping (Icecat "Other", "Not Categorized", …), so the product title decides. Logged with action "title_rule".
+* NEW: `tests/mapper-contract.php` — run with `wp eval-file` to prove the mapper on a real site.
 
 = 1.3.0 =
 * NEW: Remapping now also assigns the FULL parent chain (e.g. Headsets -> also "Gaming tilbehoer") on both the remap and fallback paths — matches how the shop's existing products are categorized

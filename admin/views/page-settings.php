@@ -15,6 +15,7 @@ $fallback         = get_option( 'icm_fallback_behavior', 'keep' );
 $fallback_cat     = get_option( 'icm_fallback_category', '' );
 $retention_days   = (int) get_option( 'icm_log_retention_days', 90 );
 $protected_raw    = get_option( 'icm_protected_slugs', '' );
+$title_rules      = (string) get_option( 'icm_title_rules', '' );
 $protected_slugs  = array_filter( array_map( 'trim', explode( ',', (string) $protected_raw ) ) );
 $woo_categories   = ICM_Admin::get_woo_categories_dropdown();
 
@@ -132,6 +133,22 @@ $icecat_languages = [
                         </option>
                     <?php endforeach; ?>
                 </select>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Title rules -->
+    <h2><?php esc_html_e( 'Title rules', 'icecat-category-mapper' ); ?></h2>
+    <p class="description">
+        <?php esc_html_e( 'Used only when a category has no mapping — e.g. the Icecat catch-all "Other" or "Not Categorized", where only the product title tells a mouse from a fan. One rule per line: WooCommerce slug, a pipe, then a regular expression (case-insensitive). First match wins, so put specific rules (mouse pad) before general ones (mouse).', 'icecat-category-mapper' ); ?>
+    </p>
+    <table class="form-table">
+        <tr>
+            <th><label for="icm_title_rules"><?php esc_html_e( 'Rules', 'icecat-category-mapper' ); ?></label></th>
+            <td>
+                <textarea id="icm_title_rules" name="icm_title_rules" rows="10" class="large-text code"
+                          placeholder="mouse-pads | mouse\s?pad&#10;mice | \bmouse\b"><?php echo esc_textarea( $title_rules ); ?></textarea>
+                <p class="description"><?php esc_html_e( 'Lines starting with # are comments. Invalid regex lines are skipped.', 'icecat-category-mapper' ); ?></p>
             </td>
         </tr>
     </table>

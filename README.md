@@ -10,13 +10,24 @@ If you import products through Icecat-based integrations (e.g. EANrunner, Store 
 - **Fully configurable** — you map Icecat categories to your own WooCommerce categories in the admin UI (WooCommerce → Icecat Mapper)
 - **Reference library** — ships with 50+ popular Icecat categories pre-seeded (IDs + bilingual names)
 - **Icecat API integration** — fetch the full category list (~5,000+ categories) from Open Icecat for free
-- **3-tier matching** — Icecat ID in post meta → exact name → fuzzy match
+- **3-tier matching** — Icecat ID in post meta → exact name → whole-word fuzzy match (only when every matching mapping agrees on the target; never a guess)
+- **Title rules** — `slug | regex` lines applied when a category has no mapping, so products in Icecat's catch-all "Other" / "Not Categorized" are filed by their title
 - **Protected categories** — mark categories that must never be remapped
 - **Fallback behavior** — keep, assign a fallback category, or remove unmapped categories
 - **Full logging** — see what was remapped, when, and which categories are missing a mapping
 - **Batch recheck** — run all existing products through the mapper
 - **Translatable** — English base language, complete Danish translation (da_DK) bundled, `.pot` template included for other languages
 - **HPOS compatible** — declared compatibility with High-Performance Order Storage
+
+## Testing
+
+On a staging site with the plugin active:
+
+```
+wp eval-file wp-content/plugins/icecat-category-mapper/tests/mapper-contract.php
+```
+
+Creates temporary categories/products, asserts the mapping decisions, cleans up, and exits non-zero on failure.
 
 ## Requirements
 
