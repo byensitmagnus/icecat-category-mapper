@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) || ! class_exists( 'ICM_Mapper' ) ) {
     exit( 1 );
 }
 
+global $wpdb;
 $created_terms = [];
 $created_posts = [];
 $failures      = 0;
@@ -122,7 +123,6 @@ try {
             ICM_DB::delete_mapping( (int) $mid );
         }
     }
-    global $wpdb;
     $wpdb->query( "DELETE FROM " . ICM_DB::unmapped_table() . " WHERE icecat_cat_name LIKE 'ICM %' OR icecat_cat_name = 'Zonitors'" );
     foreach ( $created_posts as $pid ) {
         $wpdb->delete( ICM_DB::log_table(), [ 'product_id' => $pid ] );
