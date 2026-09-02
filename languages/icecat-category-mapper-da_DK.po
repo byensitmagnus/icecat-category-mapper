@@ -476,3 +476,12 @@ msgstr "Linjer der starter med # er kommentarer. Ugyldige regex-linjer springes 
 
 msgid "Used only when a category has no mapping — e.g. the Icecat catch-all \"Other\" or \"Not Categorized\", where only the product title tells a mouse from a fan. One rule per line: WooCommerce slug, a pipe, then a regular expression (case-insensitive). First match wins, so put specific rules (mouse pad) before general ones (mouse)."
 msgstr "Bruges kun når en kategori ingen mapping har — fx Icecats opsamlingskategorier \"Other\" og \"Not Categorized\", hvor kun produkttitlen kan skelne en mus fra en blæser. Én regel pr. linje: WooCommerce-slug, en lodret streg, og så et regulært udtryk (uden forskel på store/små bogstaver). Første match vinder, så sæt specifikke regler (musemåtte) før generelle (mus)."
+
+msgid "Draft"
+msgstr "Kladde"
+
+msgid "Drafted"
+msgstr "Sat som kladde"
+
+msgid "Set the product to draft so it never shows in the shop until you map the category and run a recheck"
+msgstr "Sæt varen som kladde, så den aldrig vises i shoppen, før du mapper kategorien og kører »Tjek alle produkter igen«"

@@ -13,11 +13,21 @@ If you import products through Icecat-based integrations (e.g. EANrunner, Store 
 - **3-tier matching** — Icecat ID in post meta → exact name → whole-word fuzzy match (only when every matching mapping agrees on the target; never a guess)
 - **Title rules** — `slug | regex` lines applied when a category has no mapping, so products in Icecat's catch-all "Other" / "Not Categorized" are filed by their title
 - **Protected categories** — mark categories that must never be remapped
-- **Fallback behavior** — keep, assign a fallback category, or remove unmapped categories
+- **Fallback behavior** — keep, assign a fallback category, remove the category, or set the product to draft (never show unmapped product types to customers)
 - **Full logging** — see what was remapped, when, and which categories are missing a mapping
 - **Batch recheck** — run all existing products through the mapper
 - **Translatable** — English base language, complete Danish translation (da_DK) bundled, `.pot` template included for other languages
 - **HPOS compatible** — declared compatibility with High-Performance Order Storage
+
+## Testing
+
+On a staging site with the plugin active:
+
+```
+wp eval-file wp-content/plugins/icecat-category-mapper/tests/mapper-contract.php
+```
+
+Creates temporary categories/products, asserts the mapping decisions, cleans up, and exits non-zero on failure.
 
 ## Testing
 

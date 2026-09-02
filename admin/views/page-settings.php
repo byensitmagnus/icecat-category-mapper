@@ -118,6 +118,12 @@ $icecat_languages = [
                             <?php checked( $fallback, 'remove' ); ?>>
                         <strong><?php esc_html_e( 'Remove', 'icecat-category-mapper' ); ?></strong> — <?php esc_html_e( 'Remove the unmapped category entirely', 'icecat-category-mapper' ); ?>
                     </label>
+                    <br>
+                    <label>
+                        <input type="radio" name="icm_fallback_behavior" value="draft"
+                            <?php checked( $fallback, 'draft' ); ?>>
+                        <strong><?php esc_html_e( 'Draft', 'icecat-category-mapper' ); ?></strong> — <?php esc_html_e( 'Set the product to draft so it never shows in the shop until you map the category and run a recheck', 'icecat-category-mapper' ); ?>
+                    </label>
                 </fieldset>
             </td>
         </tr>

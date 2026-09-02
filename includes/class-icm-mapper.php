@@ -264,9 +264,30 @@ class ICM_Mapper {
             }
         } elseif ( $fallback === 'remove' ) {
             wp_remove_object_terms( $product_id, $term->term_id, 'product_cat' );
+        } elseif ( $fallback === 'draft' ) {
+            self::draft_product( $product_id, $product_title, $icecat_id, $term_name );
         }
         // 'keep' = do nothing, leave the Icecat term as-is
         return null;
+    }
+
+    /**
+     * Fallback 'draft': hide the product until the admin maps its category and runs a recheck.
+     * Direct DB write on purpose — wp_update_post() would fire save_post inside the import's
+     * own save cycle (and re-enter every product hook), and WooCommerce's data store may
+     * still be mid-save when set_object_terms fires.
+     */
+    private static function draft_product( int $product_id, string $product_title, int $icecat_id, string $term_name ): void {
+        global $wpdb;
+        if ( get_post_status( $product_id ) !== 'publish' ) {
+            return;
+        }
+        $wpdb->update( $wpdb->posts, [ 'post_status' => 'draft' ], [ 'ID' => $product_id ], [ '%s' ], [ '%d' ] );
+        clean_post_cache( $product_id );
+        if ( function_exists( 'wc_delete_product_transients' ) ) {
+            wc_delete_product_transients( $product_id );
+        }
+        ICM_Logger::log_remap( $product_id, $product_title, $icecat_id, $term_name, 0, '', 'drafted' );
     }
 
     /**

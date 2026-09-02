@@ -105,6 +105,14 @@ try {
     $amb = $product( 'Something with no title signal', [ $mons_src ] );
     $res = ICM_Mapper::remap_product_categories( $amb );
     $check( 'Ambiguous fuzzy hit (two targets) stays unmapped', $slugs_of( $amb ) === [ 'icm-monitors' ] && ! empty( $res['unmapped'] ), implode( ',', $slugs_of( $amb ) ) );
+
+    // 6. Fallback 'draft': unmapped + no title rule → product hidden as draft, category kept, logged as 'drafted'.
+    update_option( 'icm_fallback_behavior', 'draft' );
+    $hidden = $product( 'Arctic P14 PWM PST 140 mm case fan', [ $other_id ] );
+    wp_update_post( [ 'ID' => $hidden, 'post_status' => 'publish' ] );
+    ICM_Mapper::remap_product_categories( $hidden );
+    $logged = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM " . ICM_DB::log_table() . " WHERE product_id = %d AND action = 'drafted'", $hidden ) );
+    $check( 'Fallback draft: unmapped product becomes draft + logged', get_post_status( $hidden ) === 'draft' && $logged === 1 && $slugs_of( $hidden ) === [ 'icm-other' ], get_post_status( $hidden ) . ' logged=' . $logged );
 } finally {
     // ── Cleanup: everything this script created, nothing else ──
     update_option( 'icm_title_rules', $saved_rules );
