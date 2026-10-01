@@ -29,26 +29,6 @@ wp eval-file wp-content/plugins/icecat-category-mapper/tests/mapper-contract.php
 
 Creates temporary categories/products, asserts the mapping decisions, cleans up, and exits non-zero on failure.
 
-## Testing
-
-On a staging site with the plugin active:
-
-```
-wp eval-file wp-content/plugins/icecat-category-mapper/tests/mapper-contract.php
-```
-
-Creates temporary categories/products, asserts the mapping decisions, cleans up, and exits non-zero on failure.
-
-## Testing
-
-On a staging site with the plugin active:
-
-```
-wp eval-file wp-content/plugins/icecat-category-mapper/tests/mapper-contract.php
-```
-
-Creates temporary categories/products, asserts the mapping decisions, cleans up, and exits non-zero on failure.
-
 ## Requirements
 
 - WordPress 6.0+
@@ -71,6 +51,11 @@ The base language is English. A full Danish translation is bundled and loads aut
 ## Changelog
 
 See [readme.txt](readme.txt) for the full changelog.
+
+## Made by
+
+Made by [Magnus Steinmeier Olsen](https://github.com/byensitmagnus), founder of
+[Byens IT](https://www.byens-it.dk), a Danish gaming-PC and IT company.
 
 ## License
 
