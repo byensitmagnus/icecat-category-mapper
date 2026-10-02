@@ -60,3 +60,7 @@ Made by [Magnus Steinmeier Olsen](https://github.com/byensitmagnus), founder of
 ## License
 
 GPL v2 or later — see [LICENSE](LICENSE).
+
+## Project walkthrough
+
+[Open the project overview](docs/PROJECT-OVERVIEW.md) for a concise walkthrough, visual flow and status boundaries.
